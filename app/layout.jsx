@@ -1,15 +1,16 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Vazirmatn } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Provider from "@/components/Provider";
-import Header from "@/components/comon/Header";
 
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
+// const vazirmatn = Vazirmatn({
+//   variable: "--font-vazirmatn",
+//   subsets: ["latin", "arabic"],
+//   display: "swap",
+//   weight: [400, 500, 700],
 // });
 
-// const geistMono = Geist_Mono({
+// const iranSansBold = Geist_Mono({
 //   variable: "--font-geist-mono",
 //   subsets: ["latin"],
 // });
@@ -21,7 +22,11 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" dir="rtl" className="h-full antialiased">
+    <html
+      lang="fa"
+      dir="rtl"
+      className={`h-full antialiased`}
+    >
       <body className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100">
         <div className="fixed inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl animate-pulse"></div>

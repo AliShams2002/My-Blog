@@ -42,6 +42,7 @@ import {
   Clock,
 } from "lucide-react";
 import Header from "@/components/comon/Header";
+import Footer from "@/components/comon/Footer";
 
 const BlogPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -109,44 +110,48 @@ const BlogPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 ">
       <Header />
-      <div className="mx-auto px-4 sm:px-6 lg:px-12 py-4">
-        <div className="relative bg-gradient-to-br from-blue-600 via-purple-700 to-blue-700 text-gray-100 py-10 px-24 rounded-3xl text-center">
-          <h2 className="font-bold text-3xl">وبلاگ</h2>
-          {/* Search Bar */}
-          <div className="absolute w-full sm:w-96 top-24 left-80">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <input
-              type="text"
-              placeholder="Search articles..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700 rounded-3xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
-            />
+      {/* Advanced Section */}
+      <section>
+        {/* Search Section */}
+        <div className="mx-auto px-4 sm:px-6 lg:px-24 py-4">
+          <div className="relative bg-[url('/images/bg-pattern.svg')] bg-cover bg-no-repeat text-gray-100 py-14 px-24 rounded-3xl text-center">
+            <h2 className="font-bold text-3xl">وبلاگ</h2>
+            {/* Search Bar */}
+            <div className="absolute left-1/2 -translate-x-1/2 w-full sm:w-96 top-32">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2 bg-gray-800/50 border border-gray-700 rounded-3xl focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-all"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Filter Section */}
-      <div className="container w-full flex items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveFilter(category.id)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-                activeFilter === category.id
-                  ? "bg-purple-600 text-white shadow-lg shadow-purple-500/30"
-                  : "bg-gray-800/50 text-gray-300 hover:bg-gray-700 border border-gray-700"
-              }`}
-            >
-              {category.label}
-            </button>
-          ))}
+        {/* Filter Section */}
+        <div className="container w-full flex items-center justify-center mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveFilter(category.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeFilter === category.id
+                    ? "bg-purple-600 text-white shadow-lg shadow-purple-500/30"
+                    : "bg-gray-800/50 text-gray-300 hover:bg-gray-700 border border-gray-700"
+                }`}
+              >
+                {category.label}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Articles Grid */}
-      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-16 py-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredArticles.map((article) => (
             <article
@@ -239,76 +244,7 @@ const BlogPage = () => {
       </main>
 
       {/* Footer / Contact Section */}
-      <footer className="border-t border-gray-700/50 bg-black/30 backdrop-blur-lg mt-12">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
-            <div>
-              <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                About a1n
-              </h3>
-              <p className="text-gray-400 text-sm">
-                A creative space where art meets authenticity, exploring the
-                depths of dance, music, and human expression.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                Quick Links
-              </h3>
-              <ul className="space-y-2 text-sm text-gray-400">
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-purple-400 transition-colors"
-                  >
-                    About Us
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-purple-400 transition-colors"
-                  >
-                    Contact
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-purple-400 transition-colors"
-                  >
-                    Privacy Policy
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    className="hover:text-purple-400 transition-colors"
-                  >
-                    Terms of Service
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-4">
-                Contact Us
-              </h3>
-              <div className="space-y-2 text-sm text-gray-400">
-                <p>📧 info@yourwebsite.com</p>
-                <p>📞 +1 (555) 1234 5678</p>
-                <p>📍 123 Main Street, Anytown, USA</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="text-center text-gray-500 text-xs pt-8 mt-8 border-t border-gray-700/50">
-            <p>&copy; 2024 a1n Blog. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

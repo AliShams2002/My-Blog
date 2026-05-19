@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 800" preserveAspectRatio="none">
+  <defs>
+    <!-- گرادینت‌های اصلی برای هوش مصنوعی (بنفش-آبی فضا) -->
+    <linearGradient id="aiGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2c21f1" stop-opacity="1" />
+      <stop offset="50%" stop-color="#7C3AED" stop-opacity="1" />
+      <stop offset="100%" stop-color="#2563EB" stop-opacity="1" />
+    </linearGradient>
+    
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#A78BFA" stop-opacity="0" />
+      <stop offset="50%" stop-color="#60A5FA" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- فیلتر گلو برای افکت نئون ملایم -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- بکگراند پایه -->
+  <rect width="1440" height="800" fill="url(#aiGrad)" />
+
+  <!-- الگوی نقطه‌های ریز برای حس دیتا (داده) -->
+  <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1.5" fill="#C4B5FD" opacity="0.2" />
+  </pattern>
+  <rect width="1440" height="800" fill="url(#dots)" />
+
+  <!-- 1. آیکون شبکه عصبی (Nodes & Connections) - سمت چپ بالا -->
+  <g opacity="0.15" transform="translate(150, 150)">
+    <circle cx="0" cy="0" r="4" fill="#A78BFA" filter="url(#glow)"/>
+    <circle cx="60" cy="-30" r="4" fill="#60A5FA" filter="url(#glow)"/>
+    <circle cx="120" cy="0" r="4" fill="#A78BFA" filter="url(#glow)"/>
+    <circle cx="60" cy="40" r="4" fill="#60A5FA" filter="url(#glow)"/>
+    <circle cx="30" cy="80" r="4" fill="#A78BFA" filter="url(#glow)"/>
+    <circle cx="90" cy="80" r="4" fill="#60A5FA" filter="url(#glow)"/>
+    
+    <!-- خطوط اتصال بین نودها -->
+    <line x1="0" y1="0" x2="60" y2="-30" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+    <line x1="60" y1="-30" x2="120" y2="0" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+    <line x1="0" y1="0" x2="60" y2="40" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+    <line x1="60" y1="40" x2="120" y2="0" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+    <line x1="60" y1="-30" x2="60" y2="40" stroke="#C4B5FD" stroke-width="1" opacity="0.5"/>
+    <line x1="60" y1="40" x2="30" y2="80" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+    <line x1="60" y1="40" x2="90" y2="80" stroke="#C4B5FD" stroke-width="1.5" opacity="0.8"/>
+  </g>
+
+  <!-- 2. آیکون مغز هوشمند (Brain / Chip) - وسط صفحه -->
+  <g opacity="0.12" transform="translate(680, 300)">
+    <!-- نیمکره راست مغز -->
+    <path d="M40,0 C70,0 90,30 90,70 C90,110 70,140 40,140 C10,140 -10,110 -10,70 C-10,30 10,0 40,0 Z" 
+          fill="none" stroke="#60A5FA" stroke-width="2" filter="url(#glow)"/>
+    <path d="M40,20 C60,20 70,45 70,70 C70,95 60,120 40,120" 
+          fill="none" stroke="#60A5FA" stroke-width="1.5" opacity="0.6"/>
+    
+    <!-- نیمکره چپ مغز (با خطوط ارتباطی) -->
+    <path d="M0,30 L40,30 M0,50 L50,50 M0,70 L45,70 M0,90 L40,90 M0,110 L35,110" 
+          stroke="#A78BFA" stroke-width="1.5" opacity="0.8"/>
+    
+    <!-- نقاط نوری در مغز -->
+    <circle cx="40" cy="40" r="2" fill="#60A5FA" filter="url(#glow)"/>
+    <circle cx="50" cy="70" r="2" fill="#60A5FA" filter="url(#glow)"/>
+    <circle cx="35" cy="100" r="2" fill="#60A5FA" filter="url(#glow)"/>
+  </g>
+
+  <!-- 3. خطوط دیتا استریم (Data Stream) - افقی -->
+  <g opacity="0.2">
+    <path d="M0,200 Q200,180 400,210 T800,190 T1200,220 T1440,200" 
+          fill="none" stroke="url(#lineGrad)" stroke-width="2"/>
+    
+    <path d="M0,600 Q300,620 600,590 T1100,610 T1440,600" 
+          fill="none" stroke="url(#lineGrad)" stroke-width="1.5" opacity="0.6"/>
+          
+    <path d="M0,700 Q250,680 500,710 T1000,690 T1440,720" 
+          fill="none" stroke="url(#lineGrad)" stroke-width="1" opacity="0.4"/>
+  </g>
+
+  <!-- 4. مدارهای دیجیتال (Circuit Board Vibes) - سمت راست پایین -->
+  <g opacity="0.12" transform="translate(1050, 500)">
+    <!-- مستطیل چیپ -->
+    <rect x="0" y="0" width="80" height="80" rx="10" fill="none" stroke="#A78BFA" stroke-width="1.5"/>
+    
+    <!-- خطوط مدار -->
+    <line x1="40" y1="-30" x2="40" y2="0" stroke="#60A5FA" stroke-width="1.5"/>
+    <line x1="120" y1="40" x2="80" y2="40" stroke="#60A5FA" stroke-width="1.5"/>
+    <line x1="40" y1="80" x2="40" y2="110" stroke="#60A5FA" stroke-width="1.5"/>
+    <line x1="0" y1="40" x2="-30" y2="40" stroke="#60A5FA" stroke-width="1.5"/>
+    
+    <!-- دایره‌های اتصال (پین‌های چیپ) -->
+    <circle cx="40" cy="-35" r="4" fill="#A78BFA" filter="url(#glow)"/>
+    <circle cx="125" cy="40" r="4" fill="#60A5FA" filter="url(#glow)"/>
+    <circle cx="40" cy="115" r="4" fill="#A78BFA" filter="url(#glow)"/>
+    <circle cx="-35" cy="40" r="4" fill="#60A5FA" filter="url(#glow)"/>
+    
+    <!-- نقاط داده روی مدار -->
+    <circle cx="20" cy="20" r="1.5" fill="#C4B5FD"/>
+    <circle cx="60" cy="20" r="1.5" fill="#C4B5FD"/>
+    <circle cx="20" cy="60" r="1.5" fill="#C4B5FD"/>
+    <circle cx="60" cy="60" r="1.5" fill="#C4B5FD"/>
+  </g>
+
+  <!-- 5. مثلث‌های مدرن (شبیه به Play / Processing) -->
+  <g opacity="0.1">
+    <polygon points="280,680 310,630 340,680" fill="#60A5FA" filter="url(#glow)"/>
+    <polygon points="1100,120 1130,70 1160,120" fill="#A78BFA" filter="url(#glow)"/>
+    <polygon points="1300,250 1320,210 1340,250" fill="#60A5FA" filter="url(#glow)"/>
+  </g>
+
+  <!-- 6. ذرات معلق داده (Floating Data Particles) -->
+  <g fill="#C4B5FD" opacity="0.4">
+    <circle cx="180" cy="400" r="2" filter="url(#glow)"/>
+    <circle cx="350" cy="550" r="1.5" />
+    <circle cx="500" cy="150" r="2" />
+    <circle cx="850" cy="650" r="1.5" filter="url(#glow)"/>
+    <circle cx="950" cy="350" r="2" />
+    <circle cx="1200" cy="500" r="1.5" />
+    <circle cx="70" cy="700" r="1.5" />
+    <circle cx="750" cy="90" r="2" filter="url(#glow)"/>
+  </g>
+</svg>

@@ -6,15 +6,17 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, isLoading, token } = useAuth();
+  const { isAuthenticated, isLoading, token, user } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
     if (!isAuthenticated) {
       window.location.href = "/login";
+    } else if (isAuthenticated && user.role !== "admin") {
+      window.location.href = "/";
     }
-  }, [isAuthenticated, isLoading, router, token]);
+  }, [isAuthenticated, isLoading, router, token, user]);
 
   if (isLoading || !isAuthenticated) {
     return (
