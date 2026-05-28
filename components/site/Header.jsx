@@ -52,7 +52,7 @@ const Header = () => {
   const openMenu = () => setIsMenuOpen(true);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/30 backdrop-blur-lg">
+    <header className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/10 backdrop-blur-lg">
       <div className="container mx-auto px-4 sm:px-6 lg:px-16 py-4">
         <div className="w-full flex items-center justify-between">
           <MobileMenu
@@ -68,9 +68,11 @@ const Header = () => {
               className="w-4 h-4 sm:hidden cursor-pointer"
               onClick={openMenu}
             />
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">
-              AI_BLOG
-            </h2>
+            <Link href="/">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">
+                وبلاگ من
+              </h2>
+            </Link>
           </div>
           <div className="hidden sm:flex items-center gap-4 text-sm text-gray-400 mt-1">
             {menuItems.map((i) => (

@@ -1,6 +1,6 @@
 "use client";
 
-import SpinnerLoading from "@/components/SpinnerLoading";
+import SpinnerLoading from "@/components/shared/SpinnerLoading";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";

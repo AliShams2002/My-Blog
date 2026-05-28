@@ -17,7 +17,7 @@ const MobileMenu = ({
       >
         <div className="w-full flex items-center justify-between pb-4 border-b border-gray-700">
           <h2 className="text-lg font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">
-            AI_BLOG
+            وبلاگ من
           </h2>
           <span
             className="bg-gray-700/30 hover:bg-gray-700/70 text-red-900 py-1 px-2 text-sm rounded-sm cursor-pointer transition-all duration-100"

@@ -56,6 +56,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         isLoading,
+        setIsLoading,
         isAuthenticated: !!token,
       }}
     >

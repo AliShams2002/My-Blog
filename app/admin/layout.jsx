@@ -5,10 +5,10 @@ import PrivateRoute from "@/utils/PrivateRoute";
 
 export default function AdminLayout({ children }) {
   return (
-    <div className="flex h-screen">
+    <div className="">
       <AuthProvider>
-          <PrivateRoute>{children}</PrivateRoute>
-        </AuthProvider>
+        <PrivateRoute>{children}</PrivateRoute>
+      </AuthProvider>
     </div>
   );
 }
