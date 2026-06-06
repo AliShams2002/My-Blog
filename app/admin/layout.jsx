@@ -2,12 +2,15 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import PrivateRoute from "@/utils/PrivateRoute";
+import LayoutContent from "./LayoutContent";
 
 export default function AdminLayout({ children }) {
   return (
     <div className="">
       <AuthProvider>
-        <PrivateRoute>{children}</PrivateRoute>
+        <PrivateRoute>
+          <LayoutContent>{children}</LayoutContent>
+        </PrivateRoute>
       </AuthProvider>
     </div>
   );

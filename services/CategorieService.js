@@ -1,6 +1,6 @@
-import {  serverFetcher } from "./Fetcher";
+import { clientFetcher } from "./Fetcher";
 
 export const getAllCategories = async () => {
-  const data = await serverFetcher("/api/categories");
+  const data = await clientFetcher("/api/categories");
   return data;
 };

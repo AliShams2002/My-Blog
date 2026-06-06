@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Eye, EyeOff, ArrowRight, Sparkles, User } from "lucide-react";
+import { Lock, ArrowRight, Sparkles, User } from "lucide-react";
 import { loginSchema } from "@/utils/AuthValidation";
-import { loginService } from "../../services/AuthService";
+import { loginUser } from "@/services/AuthService";
 
 const Login = () => {
   const {
@@ -30,7 +30,7 @@ const Login = () => {
   }, [isAuthenticated, isLoading, user, router]);
 
   const onSubmit = async (params) => {
-    await loginService(params, login);
+    await loginUser(params, login);
   };
 
   return (

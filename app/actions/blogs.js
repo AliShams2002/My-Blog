@@ -1,6 +1,7 @@
 "use server";
 
-import { deleteComment, createComment } from "@/services/CommentService";
+import { deleteBlogs } from "@/services/BlogService";
+import { deleteComment, postComment } from "@/services/CommentService";
 import { revalidatePath } from "next/cache";
 
 export async function addComment(formData) {
@@ -11,7 +12,7 @@ export async function addComment(formData) {
     return { success: false, error: "متن مقاله الزامی است!" };
   }
 
-  const newComment = await createComment({
+  const newComment = await postComment({
     content,
     articleId,
   });
@@ -25,16 +26,18 @@ export async function addComment(formData) {
     newComment,
   };
 }
-export async function removeComment(formData) {
+export async function removeBlog(formData) {
   const id = formData.get("id");
 
   if (!id) {
     return { success: false, error: "id مقاله الزامی است!" };
   }
 
-  const newComment = await deleteComment(id);
+  const newComment = await deleteBlogs(id);
 
   if (!newComment) return { success: false, error: "خطا در ارسال درخواست!" };
+
+  console.log(newComment);
 
   revalidatePath(`/admin/comments`);
 

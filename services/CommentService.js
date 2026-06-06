@@ -1,16 +1,16 @@
-import { serverFetcher } from "./Fetcher";
+import { clientFetcher, serverFetcher } from "./Fetcher";
 
 export const getAllComments = async () => {
-  const data = await serverFetcher("/api/comments");
+  const data = await clientFetcher("/api/comments");
   return data;
 };
 
 export const getCommentsByBlogId = async (blogId) => {
-  const data = await serverFetcher(`/api/articles/${blogId}/comments`);
+  const data = await clientFetcher(`/api/articles/${blogId}/comments`);
   return data;
 };
 
-export const postComment = async (params) => {
+export const createComment = async (params) => {
   try {
     const data = await serverFetcher("/api/comments", {
       method: "POST",
@@ -20,5 +20,30 @@ export const postComment = async (params) => {
   } catch (error) {
     const serverMassage = error.response?.data?.message;
     return serverMassage;
+  }
+};
+
+export const updateComment = async (params) => {
+  const { id } = params;
+  try {
+    const data = await serverFetcher(`/api/comments/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(params),
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const deleteComment = async (params) => {
+  const { id } = params;
+  try {
+    const data = await serverFetcher(`/api/comments/${id}`, {
+      method: "DELETE",
+    });
+    return data;
+  } catch (error) {
+    return error;
   }
 };

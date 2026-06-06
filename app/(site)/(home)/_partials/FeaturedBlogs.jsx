@@ -14,12 +14,12 @@ const FeaturedBlogs = ({
   return (
     <>
       <main className="container mx-auto px-4 sm:px-6 lg:px-16 py-2">
-        {activeFilter === "all" && searchTerm === "" && (
+        {featuredBlog && activeFilter === "all" && searchTerm === "" && (
           <Link href={`/blog/${featuredBlog.id}`} key={featuredBlog.id}>
             <article className="flex items-stretch gap-2 justify-between mb-8 bg-gray-800/10 hover:bg-gray-800/30 backdrop-blur-sm group hover:shadow-xl transition-all duration-300 hover:transform rounded-2xl overflow-hidden">
               <img
-                src="/images/image1.jpg"
-                className="w-1/2 rounded-lg"
+                src={featuredBlog.image}
+                className="w-1/2 h-72 rounded-lg"
                 alt=""
               />
               <div className="w-1/2 flex flex-col justify-between py-4 px-8">

@@ -13,7 +13,7 @@ export default function LayoutContent({ children }) {
 
   const isAdminRoute = pathname?.startsWith("/admin");
 
-  if (isLoading)
+  if (isLoading && !isAdminRoute)
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <SpinnerLoading width="v-8" height="h-8" />

@@ -20,8 +20,8 @@ const PrivateRoute = ({ children }) => {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="w-8 h-8 flex items-center justify-center">
-        <SpinnerLoading width="v-8" height="v-8" />
+      <div className="w-screen h-screen flex items-center justify-center">
+        <SpinnerLoading width="v-8" height="h-8" />
       </div>
     );
   }

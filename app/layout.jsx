@@ -6,7 +6,9 @@ import Header from "@/components/site/Header";
 import Footer from "@/components/site/Footer";
 import LayoutContent from "./LayoutContent";
 import CategoriesProvider from "@/context/CategoriesContext";
+import BlogsProvider from "@/context/BlogContext";
 import { getAllCategories } from "@/services/CategorieService";
+import { getAllBlogs } from "@/services/BlogService";
 
 // const vazirmatn = Vazirmatn({
 //   variable: "--font-vazirmatn",
@@ -26,7 +28,9 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
+  const blogsData = await getAllBlogs();
   const categoriesData = await getAllCategories();
+
   return (
     <html lang="fa" dir="rtl">
       <body className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100">
@@ -37,9 +41,11 @@ export default async function RootLayout({ children }) {
           <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-600/10 rounded-full blur-3xl"></div>
         </div>
         <AuthProvider>
-          <CategoriesProvider categoriesData={categoriesData}>
-            <LayoutContent>{children}</LayoutContent>
-          </CategoriesProvider>
+          <BlogsProvider blogsData={blogsData}>
+            <CategoriesProvider categoriesData={categoriesData}>
+              <LayoutContent>{children}</LayoutContent>
+            </CategoriesProvider>
+          </BlogsProvider>
         </AuthProvider>
       </body>
     </html>

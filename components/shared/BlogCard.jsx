@@ -5,7 +5,7 @@ import React from "react";
 
 const BlogCard = ({ article, getCatById }) => {
   return (
-    <article className="group bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:-translate-y-2">
+    <article className="group w-full bg-gray-800/30 backdrop-blur-sm rounded-2xl overflow-hidden border border-gray-700/50 hover:border-purple-500/50 transition-all duration-300 hover:transform hover:-translate-y-2">
       {/* Article Image */}
       <div className="relative overflow-hidden h-56">
         <img
