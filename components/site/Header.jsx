@@ -87,7 +87,7 @@ const Header = () => {
           </div>
           {isAuthenticated ? (
             <div>
-              <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center gap-2" ref={moduleRef}>
                 <span
                   className="py-1 px-2 font-bold rounded-full bg-gradient-to-r from-purple-600 to-blue-600 cursor-pointer"
                   onClick={toggleModule}
@@ -95,10 +95,7 @@ const Header = () => {
                   {user.username.charAt(0)}
                 </span>
                 {isModuleOpen && (
-                  <div
-                    className="min-w-56 w-full absolute top-12 left-0 bg-gray-800 flex items-center flex-col gap-2 rounded-2xl p-2 font-semibold"
-                    ref={moduleRef}
-                  >
+                  <div className="min-w-56 w-full absolute top-12 left-0 bg-gray-800 flex items-center flex-col gap-2 rounded-2xl p-2 font-semibold">
                     <h3 className="w-full text-gray-400 p-2 border-b border-gray-700">
                       {user.username}
                     </h3>

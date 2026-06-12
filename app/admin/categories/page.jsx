@@ -1,7 +1,33 @@
+import {
+  getAllCategories,
+  getBlogRelatedOfCategory,
+} from "@/services/CategorieService";
 import React from "react";
+import CategoriesClient from "./_partials/CategorieClient";
+import Skeleton from "@/components/admin/SkeletonLoading";
 
-const Page = () => {
-  return <div>categories</div>;
+export const dynamic = "force-dynamic";
+const Page = async () => {
+  const categories = await getAllCategories();
+
+  const categoriesWithCount = await Promise.all(
+    categories.map(async (category) => {
+      try {
+        const articles = await getBlogRelatedOfCategory(category.id);
+        return {
+          ...category,
+          articlesCount: articles?.length || 0,
+        };
+      } catch (error) {
+        console.error(`Error: ${error}`);
+        return { ...category, articlesCount: 0 };
+      }
+    }),
+  );
+
+  if (!categories) return <Skeleton type="card" />;
+
+  return <CategoriesClient categories={categoriesWithCount} />;
 };
 
 export default Page;

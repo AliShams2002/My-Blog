@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Categories from "./Categories";
 import FeaturedBlogs from "./FeaturedBlogs";
 import { useCategories } from "@/context/CategoriesContext";
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
+import { useDebounce } from "@/hooks/useDebound";
+import { handelSearch } from "@/utils/searchLib";
 
 const HomeClient = ({ data }) => {
   const { getCategoriesWithAll, getCategoryName } = useCategories();
@@ -13,9 +15,26 @@ const HomeClient = ({ data }) => {
   const [categoriesData, setCategoriesData] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
+  const debouncedSearch = useDebounce(searchTerm, 1000);
+  const debouncedFilter = useDebounce(activeFilter, 800);
   const [isLoading, setIsLoading] = useState(null);
+  const [isFilterLoading, setIsFilterLoading] = useState(null);
 
   const catsWithAllOption = getCategoriesWithAll();
+
+  useEffect(() => {
+    setIsFilterLoading(true);
+    const timer = setTimeout(() => {
+      setIsFilterLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [debouncedSearch, debouncedFilter]);
+
+  const handleFilter = useMemo(() => {
+    if (!debouncedFilter) return data;
+    const dataFiltered = handelSearch(data, searchTerm, activeFilter);
+    return dataFiltered;
+  }, [blogs, categoriesData, debouncedFilter, debouncedSearch]);
 
   useEffect(() => {
     setIsLoading(true);
@@ -24,15 +43,6 @@ const HomeClient = ({ data }) => {
     setFeaturedBlog(data.at(-1));
     setIsLoading(false);
   }, [data]);
-
-  const filteredArticles = blogs.filter((article) => {
-    const matchesSearch =
-      article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      article.content.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter =
-      activeFilter === "all" || article.categoryId === activeFilter;
-    return matchesSearch && matchesFilter;
-  });
 
   if (isLoading) return <SpinnerLoading width="v-8" height="h-8" />;
 
@@ -52,8 +62,9 @@ const HomeClient = ({ data }) => {
         getCatById={getCategoryName}
         featuredBlog={featuredBlog}
         activeFilter={activeFilter}
-        filteredArticles={filteredArticles}
+        filteredBlogs={handleFilter}
         searchTerm={searchTerm}
+        blogCardLoading={isFilterLoading}
       />
     </>
   );

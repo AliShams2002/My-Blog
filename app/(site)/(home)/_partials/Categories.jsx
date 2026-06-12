@@ -12,7 +12,7 @@ const Categories = ({
     <section>
       {/* Search Section */}
       <div className="mx-auto px-4 sm:px-6 lg:px-24 py-4">
-        <div className="relative bg-[url('/images/bg-pattern.svg')] bg-cover bg-no-repeat text-gray-100 py-14 px-24 rounded-3xl text-center">
+        <div className="relative bg-[url('/images/bg-patterns.svg')] bg-cover bg-no-repeat text-gray-100 py-14 px-24 rounded-3xl text-center">
           <h2 className="font-bold text-3xl">وبلاگ</h2>
           {/* Search Bar */}
           <div className="absolute left-1/2 -translate-x-1/2 w-full sm:w-96 top-32">

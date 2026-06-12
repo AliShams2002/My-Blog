@@ -1,36 +1,36 @@
 "use client";
 
 import {
-  addBlog,
-  editBlog,
-  removeBlog,
-} from "@/app/admin/blogs/_partials/action";
+  addUser,
+  editUserRole,
+  removeUser,
+} from "@/app/admin/users/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
 const TOAST_MESSAGES = {
-  addSuccess: "مقاله با موفقیت اضافه شد",
-  editSuccess: "مقاله با موفقیت ویرایش شد",
-  deleteSuccess: "مقاله با موفقیت حذف شد",
+  addSuccess: "کاربر با موفقیت اضافه شد",
+  editSuccess: "کاربر با موفقیت ویرایش شد",
+  deleteSuccess: "کاربر با موفقیت حذف شد",
   error: "خطا در عملیات",
 };
 
-export function useBlogManager(initialBlogs) {
-  const [blogs, setBlogs] = useState(initialBlogs);
+export function useUserManager(initialUsers) {
+  const [users, setUsers] = useState(initialUsers);
   const [modalState, setModalState] = useState({
     isOpen: false,
     mode: "add",
-    selectedBlog: null,
+    selectedUser: null,
     isLoading: false,
   });
   const [isPending, startTransition] = useTransition();
 
-  const openModal = useCallback((mode, blog = null) => {
+  const openModal = useCallback((mode, user = null) => {
     setModalState({
       isOpen: true,
       mode,
-      selectedBlog: blog,
+      selectedUser: user,
       isLoading: false,
     });
   }, []);
@@ -41,13 +41,13 @@ export function useBlogManager(initialBlogs) {
 
   const handleAdd = useCallback(() => openModal("add"), [openModal]);
   const handleEdit = useCallback(
-    (blog) => openModal("edit", blog),
+    (user) => openModal("edit", user),
     [openModal],
   );
 
   const handleDelete = useCallback(async (id) => {
     const confirmed = await confirmModal(
-      "آیا از حذف این مقاله مطمئن هستید؟",
+      "آیا از حذف این کاربر مطمئن هستید؟",
       "حذف",
       "انصراف",
     );
@@ -58,10 +58,10 @@ export function useBlogManager(initialBlogs) {
       const formData = new FormData();
       formData.append("id", id);
 
-      const response = await removeBlog(formData);
-
+      const response = await removeUser(formData);
+      console.log(response);
       if (response.success) {
-        setBlogs((prev) => prev.filter((blog) => blog.id !== id));
+        setUsers((prev) => prev.filter((user) => user.id !== id));
         toast.success(TOAST_MESSAGES.deleteSuccess);
       } else {
         toast.error(response.error || TOAST_MESSAGES.error);
@@ -71,7 +71,7 @@ export function useBlogManager(initialBlogs) {
 
   const handleSubmit = useCallback(
     async (formData) => {
-      const { mode, selectedBlog } = modalState;
+      const { mode, selectedUser } = modalState;
       const isAddMode = mode === "add";
 
       setModalState((prev) => ({ ...prev, isLoading: true }));
@@ -83,19 +83,21 @@ export function useBlogManager(initialBlogs) {
         }
       });
 
-      if (!isAddMode && selectedBlog?.id) {
-        form.append("id", selectedBlog.id);
+      if (!isAddMode && selectedUser?.id) {
+        form.append("id", selectedUser.id);
       }
 
       startTransition(async () => {
-        const response = isAddMode ? await addBlog(form) : await editBlog(form);
-        const { data } = response.data;
+        const response = isAddMode
+          ? await addUser(form)
+          : await editUserRole(form);
         if (response.success) {
-          setBlogs((prev) =>
+          const { data } = response.data;
+          setUsers((prev) =>
             isAddMode
-              ? [...prev, data]
-              : prev.map((blog) =>
-                  blog.id === selectedBlog?.id ? data : blog,
+              ? [...prev, data.user]
+              : prev.map((user) =>
+                  user.id === selectedUser?.id ? data.user : user,
                 ),
           );
           toast.success(
@@ -108,11 +110,11 @@ export function useBlogManager(initialBlogs) {
         }
       });
     },
-    [modalState.mode, modalState.selectedBlog, closeModal],
+    [modalState.mode, modalState.selectedUser, closeModal],
   );
 
   return {
-    blogs,
+    users,
     modalState,
     isPending,
     handleAdd,

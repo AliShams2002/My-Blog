@@ -1,6 +1,5 @@
 import React from "react";
 import { getAllBlogs } from "@/services/BlogService";
-import { getAllCategories } from "@/services/CategorieService";
 import HomeClient from "./_partials/HomeClient";
 
 export const revalidate = 30;

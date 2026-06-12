@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400" preserveAspectRatio="none">
+  <defs>
+    <!-- گرادینت پس‌زمینه بنفش به آبی -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#6D28D9;stop-opacity:1" /> <!-- بنفش تیره -->
+      <stop offset="50%" style="stop-color:#5B21B6;stop-opacity:1" /> <!-- بنفش متوسط -->
+      <stop offset="100%" style="stop-color:#1E3A8A;stop-opacity:1" /> <!-- آبی تیره -->
+    </linearGradient>
+
+    <!-- گرادینت برای دایره‌های تزئینی -->
+    <radialGradient id="circleGrad1" cx="30%" cy="20%" r="50%">
+      <stop offset="0%" style="stop-color:#A855F7;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0" />
+    </radialGradient>
+
+    <radialGradient id="circleGrad2" cx="70%" cy="80%" r="50%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.15" />
+      <stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- مستطیل اصلی با گرادینت -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)" />
+
+  <!-- دایره‌های پس‌زمینه مینیمال -->
+  <circle cx="150" cy="100" r="200" fill="url(#circleGrad1)" />
+  <circle cx="1050" cy="300" r="250" fill="url(#circleGrad2)" />
+  <circle cx="600" cy="200" r="180" fill="#A855F7" opacity="0.03" />
+  <circle cx="100" cy="350" r="120" fill="#3B82F6" opacity="0.05" />
+  <circle cx="1100" cy="50" r="100" fill="#8B5CF6" opacity="0.06" />
+
+  <!-- خطوط موج دار مینیمال (نماد مطلب و محتوا) -->
+  <path d="M0,250 C100,220 200,280 300,250 C400,220 500,260 600,240 C700,220 800,260 900,240 C1000,220 1100,250 1200,230" 
+        fill="none" stroke="#C4B5FD" stroke-width="1.5" opacity="0.3" />
+  <path d="M0,300 C150,280 250,320 400,290 C550,260 650,310 800,285 C950,260 1050,300 1200,280" 
+        fill="none" stroke="#A855F7" stroke-width="1" opacity="0.2" />
+
+  <!-- ===== آیکون قلم (نوشتار و وبلاگ) - سمت چپ ===== -->
+  <g transform="translate(180, 140)" fill="none" stroke="#C4B5FD" stroke-width="2" opacity="0.7">
+    <path d="M5,25 L5,30 L25,30 L25,25" stroke-linecap="round"/>
+    <line x1="8" y1="20" x2="8" y2="25" stroke-linecap="round"/>
+    <line x1="15" y1="20" x2="15" y2="25" stroke-linecap="round"/>
+    <line x1="22" y1="20" x2="22" y2="25" stroke-linecap="round"/>
+    <path d="M12,10 L18,16" stroke-linecap="round"/>
+    <path d="M18,10 L12,16" stroke-linecap="round"/>
+    <circle cx="15" cy="10" r="8"/>
+  </g>
+
+  <!-- ===== آیکون نوشتار (مقاله) - سمت راست بالا ===== -->
+  <g transform="translate(950, 90)" fill="none" stroke="#F0ABFC" stroke-width="2" opacity="0.6">
+    <rect x="5" y="5" width="24" height="28" rx="3" />
+    <line x1="10" y1="13" x2="24" y2="13" stroke-linecap="round" />
+    <line x1="10" y1="18" x2="22" y2="18" stroke-linecap="round" />
+    <line x1="10" y1="23" x2="20" y2="23" stroke-linecap="round" />
+    <line x1="10" y1="8" x2="20" y2="8" stroke-linecap="round" />
+  </g>
+
+  <!-- ===== آیکون مغز (هوش مصنوعی) - مرکز کمی چپ ===== -->
+  <g transform="translate(720, 260)" fill="none" stroke="#93C5FD" stroke-width="2" opacity="0.6">
+    <!-- مغز ساده شده -->
+    <path d="M20,15 C10,15 5,22 8,28 C3,32 5,40 12,42 C10,48 16,52 20,50 C24,52 30,48 28,42 C35,40 37,32 32,28 C35,22 30,15 20,15Z" />
+    <line x1="15" y1="25" x2="25" y2="25" stroke-linecap="round" />
+    <line x1="15" y1="32" x2="25" y2="32" stroke-linecap="round" />
+    <line x1="18" y1="39" x2="22" y2="39" stroke-linecap="round" />
+    <circle cx="14" cy="20" r="1.5" fill="#93C5FD" />
+    <circle cx="26" cy="20" r="1.5" fill="#93C5FD" />
+  </g>
+
+  <!-- ===== آیکون چت / گفتگو (هوش مصنوعی) - پایین راست ===== -->
+  <g transform="translate(870, 290)" fill="none" stroke="#A78BFA" stroke-width="2" opacity="0.55">
+    <path d="M8,28 L15,35 L22,28" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M5,10 C5,5 12,5 18,5 C24,5 28,5 28,10 L28,22 C28,27 24,27 18,27 L10,27 L5,32 L5,27 C5,22 5,10 5,10Z" />
+  </g>
+
+  <!-- ===== آیکون دایره‌های هوشمند (شبکه AI) - وسط راست ===== -->
+  <g transform="translate(500, 120)" fill="none" stroke="#F0ABFC" stroke-width="1.5" opacity="0.5">
+    <circle cx="10" cy="10" r="6" />
+    <circle cx="30" cy="10" r="4" />
+    <circle cx="20" cy="25" r="5" />
+    <circle cx="45" cy="20" r="3" />
+    <line x1="16" y1="10" x2="26" y2="10" stroke-linecap="round" />
+    <line x1="10" y1="16" x2="16" y2="22" stroke-linecap="round" />
+    <line x1="30" y1="14" x2="25" y2="20" stroke-linecap="round" />
+    <line x1="20" y1="30" x2="42" y2="21" stroke-linecap="round" />
+  </g>
+
+  <!-- ===== آیکون ستاره/جرقه (نشانه ایده AI) - پراکنده ===== -->
+  <g fill="#FDE047" opacity="0.4">
+    <path d="M850,130 L852,136 L858,136 L853,140 L855,146 L850,142 L845,146 L847,140 L842,136 L848,136 Z" />
+    <path d="M380,280 L381.5,284 L386,284 L382.5,287 L384,291 L380,288.5 L376,291 L377.5,287 L374,284 L378.5,284 Z" />
+    <path d="M100,200 L101,203 L104,203 L101.5,205 L102.5,208 L100,206 L97.5,208 L98.5,205 L96,203 L99,203 Z" />
+  </g>
+
+  <!-- نقاط ریز مینیمال -->
+  <g fill="#E0E7FF" opacity="0.3">
+    <circle cx="250" cy="300" r="2" />
+    <circle cx="650" cy="80" r="1.5" />
+    <circle cx="450" cy="350" r="2" />
+    <circle cx="1050" cy="180" r="1.5" />
+    <circle cx="550" cy="250" r="1" />
+    <circle cx="350" cy="50" r="2" />
+    <circle cx="820" cy="350" r="1.5" />
+    <circle cx="150" cy="180" r="1" />
+    <circle cx="700" cy="150" r="2" />
+  </g>
+</svg>

@@ -56,7 +56,7 @@ const AdminDashboard = async () => {
     },
     {
       title: "کاربران فعال",
-      value: users.length,
+      value: users.data.length,
       icon: UserCheck,
       color: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10",
@@ -262,7 +262,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {users.slice(-3).map((user) => (
+            {users.data.slice(-3).map((user) => (
               <div
                 key={user.id}
                 className="flex items-center justify-between p-2 hover:bg-gray-700/30 rounded-lg transition-colors"

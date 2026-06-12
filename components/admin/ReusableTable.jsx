@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useDebounce } from "@/hooks/useDebound";
 import SpinnerLoading from "../shared/SpinnerLoading";
 import { useBlog } from "@/context/BlogContext";
+import { handelSearch } from "@/utils/searchLib";
 
 const ReusableTable = ({
   columns,
@@ -36,15 +37,9 @@ const ReusableTable = ({
   const { getCategoryName } = useCategories();
   const { getBlogName } = useBlog();
 
-  const filteredBlogs = useMemo(() => {
-    return data.filter((article) => {
-      const matchesSearch =
-        article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        article.author.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesFilter =
-        activeFilter === "all" || article.categoryId === activeFilter;
-      return matchesSearch && matchesFilter;
-    });
+  const handleFilter = useMemo(() => {
+    if (!debouncedFilter) return data;
+    return handelSearch(data, searchTerm, activeFilter);
   }, [data, debouncedFilter, debouncedSearch]);
 
   useEffect(() => {
@@ -56,9 +51,9 @@ const ReusableTable = ({
   }, [debouncedFilter, debouncedSearch]);
 
   // پیجینیشن
-  const totalPages = Math.ceil(filteredBlogs.length / itemsPerPage);
+  const totalPages = Math.ceil(handleFilter.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = filteredBlogs.slice(
+  const paginatedData = handleFilter.slice(
     startIndex,
     startIndex + itemsPerPage,
   );
@@ -316,8 +311,8 @@ const ReusableTable = ({
         <div className="p-4 border-t border-gray-700/50 flex justify-between items-center">
           <div className="text-sm text-gray-400">
             نمایش {startIndex + 1} تا{" "}
-            {Math.min(startIndex + itemsPerPage, filteredBlogs.length)} از{" "}
-            {filteredBlogs.length} نتیجه
+            {Math.min(startIndex + itemsPerPage, handleFilter.length)} از{" "}
+            {handleFilter.length} نتیجه
           </div>
           <div className="flex gap-2">
             <button
