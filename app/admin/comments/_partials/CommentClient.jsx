@@ -4,7 +4,7 @@ import React from "react";
 import FormModal from "@/components/admin/FormModal";
 import { useCommentManager } from "@/hooks/useCommentManager";
 
-const CommentClient = ({ comments: initialComments, categories }) => {
+const CommentClient = ({ comments: initialComments }) => {
   const {
     comments,
     modalState,
@@ -13,6 +13,7 @@ const CommentClient = ({ comments: initialComments, categories }) => {
     handleDelete,
     handleSubmit,
     closeModal,
+    commentSchema,
   } = useCommentManager(initialComments);
   const columns = [
     { key: "author", label: "نویسنده" },
@@ -31,7 +32,6 @@ const CommentClient = ({ comments: initialComments, categories }) => {
       placeholder: "متن مقاله را وارد کنید",
     },
   ];
-
   return (
     <>
       <ReusableTable
@@ -53,6 +53,8 @@ const CommentClient = ({ comments: initialComments, categories }) => {
         initialData={modalState.selectedComment || {}}
         fields={commentFields}
         isLoading={modalState.isPending}
+        serverErrors={modalState.serverErrors}
+        schema={commentSchema}
       />
     </>
   );

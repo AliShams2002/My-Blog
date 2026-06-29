@@ -2,21 +2,19 @@
 
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
 import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
-  const { isAuthenticated, isLoading, token, user } = useAuth();
+  const { user, isAuthenticated, isLoading, token } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
     if (isLoading) return;
     if (!isAuthenticated) {
-      window.location.href = "/login";
-    } else if (isAuthenticated && user.role !== "admin") {
-      window.location.href = "/";
+      router.replace("/login");
     }
-  }, [isAuthenticated, isLoading, router, token, user]);
+  }, [isAuthenticated, isLoading]);
 
   if (isLoading || !isAuthenticated) {
     return (

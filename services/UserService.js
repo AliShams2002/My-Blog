@@ -1,4 +1,16 @@
-import { serverFetcher } from "./Fetcher";
+import { clientFetcher, serverFetcher } from "./Fetcher";
+
+export const loginUser = async (params) => {
+  try {
+    const data = await clientFetcher(`/api/auth/login`, {
+      method: "POST",
+      body: JSON.stringify(params),
+    });
+    return data;
+  } catch (error) {
+    return error;
+  }
+};
 
 export const getAllUsers = async () => {
   const data = await serverFetcher("/api/auth/users");
@@ -16,11 +28,10 @@ export const createUser = async (params) => {
   }
 };
 export const updateUserRole = async (params) => {
-  const { id } = params;
   try {
-    const data = await serverFetcher(`/api/auth/users/${id}/role`, {
+    const data = await serverFetcher(`/api/auth/users/${params.id}/role`, {
       method: "PUT",
-      body: JSON.stringify(params),
+      body: JSON.stringify(params.data),
     });
     return data;
   } catch (error) {

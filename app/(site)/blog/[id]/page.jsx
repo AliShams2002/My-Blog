@@ -6,7 +6,7 @@ import { getCommentsByBlogId } from "@/services/CommentService";
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  const allBlogs = await getAllBlogs();
+  const { data: allBlogs } = await getAllBlogs();
 
   return allBlogs.map((blog) => ({
     id: String(blog.id),
@@ -15,21 +15,18 @@ export async function generateStaticParams() {
 
 const Blog = async ({ params }) => {
   const { id } = await params;
-  const [allBlogs, blogDetails, comments] = await Promise.all([
-    getAllBlogs(),
-    getBlogById(id),
-    getCommentsByBlogId(id),
-  ]);
-
-  const suggestedBlogs = allBlogs
-    .filter((b) => b.id !== blogDetails.id)
-    .slice(0, 3);
+  const [{ data: allBlogs }, { data: blogDetails }, { data: comments }] =
+    await Promise.all([
+      getAllBlogs(),
+      getBlogById(id),
+      getCommentsByBlogId(id),
+    ]);
 
   return (
     <BlogClient
-      blogDetails={blogDetails}
-      suggestedBlogs={suggestedBlogs}
-      comments={comments}
+      initialBlogDetails={blogDetails}
+      initialBlogs={allBlogs}
+      initialComments={comments}
     />
   );
 };

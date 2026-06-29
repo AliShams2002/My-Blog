@@ -1,37 +1,16 @@
 "use client";
 
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, ArrowRight, Sparkles, User } from "lucide-react";
-import { loginSchema } from "@/utils/AuthValidation";
-import { loginUser } from "@/services/AuthService";
+import { useLoginManager } from "@/hooks/useLoginManager";
 
 const Login = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-    formState: { errors },
-  } = useForm({ resolver: zodResolver(loginSchema) });
-  const { user, isAuthenticated, isLoading, login } = useAuth();
-  const router = useRouter();
+  const { handleSubmit, register, isSubmitting, errors } = useLoginManager();
 
   useEffect(() => {
-    if (isLoading) return;
-    if (isAuthenticated && user && user.role === "admin") {
-      router.push("admin/dashboard");
-    } else if (isAuthenticated && user && user.role !== "admin") {
-      router.push("/");
-    }
-  }, [isAuthenticated, isLoading, user, router]);
 
-  const onSubmit = async (params) => {
-    await loginUser(params, login);
-  };
+  }, [register])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -54,7 +33,7 @@ const Login = () => {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام کاربری
@@ -98,7 +77,7 @@ const Login = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 group"
+                  className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 group cursor-pointer"
                   disabled={isSubmitting}
                 >
                   <span>
@@ -125,7 +104,7 @@ const Login = () => {
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent mb-3">
-              AI_BLOG
+              وبلاگ من
             </h1>
 
             <p className="text-gray-400 text-sm md:text-base max-w-xs mx-auto">
@@ -150,17 +129,11 @@ const Login = () => {
             {/* Quote */}
             <div className="mt-8 p-4 bg-white/5 rounded-xl border border-white/10 max-w-xs">
               <p className="text-xs text-gray-400 italic">
-                "آینده وبلاگ نویسی از راه رسیده است. به وبلاگ AI_BLOG خوش
-                آمدید."
+                "آینده وبلاگ نویسی از راه رسیده است. به وبلاگ من خوش آمدید."
               </p>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Footer Note */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 text-center text-gray-500 text-xs">
-        <p>© 2026 AI_BLOG. تمامی حقوق محفوظ است.</p>
       </div>
     </div>
   );

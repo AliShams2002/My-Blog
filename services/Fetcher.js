@@ -19,6 +19,7 @@ export const serverFetcher = async (url, option = {}) => {
       error.message = errorMessage;
       throw error;
     }
+
     return {
       success: true,
       data,
@@ -47,9 +48,13 @@ export const clientFetcher = async (url, option = {}) => {
       error.message = errorMessage;
       throw error;
     }
-    return data;
+    return {
+      success: true,
+      data,
+    };
   } catch (error) {
     throw {
+      success: false,
       message: error.message || "خطا در برقراری ارتباط با سرور",
     };
   }

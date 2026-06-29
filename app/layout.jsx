@@ -9,6 +9,7 @@ import CategoriesProvider from "@/context/CategoriesContext";
 import BlogsProvider from "@/context/BlogContext";
 import { getAllCategories } from "@/services/CategorieService";
 import { getAllBlogs } from "@/services/BlogService";
+import PrivateRoute from "@/utils/PrivateRoute";
 
 // const vazirmatn = Vazirmatn({
 //   variable: "--font-vazirmatn",
@@ -28,8 +29,8 @@ export const metadata = {
 };
 
 export default async function RootLayout({ children }) {
-  const blogsData = await getAllBlogs();
-  const categoriesData = await getAllCategories();
+  const { data: blogsData } = await getAllBlogs();
+  const { data: categoriesData } = await getAllCategories();
 
   return (
     <html lang="fa" dir="rtl">

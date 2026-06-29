@@ -6,6 +6,7 @@ import {
   removeBlog,
 } from "@/app/admin/blogs/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
+import { blogSchema } from "@/utils/FormValidation";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
@@ -23,6 +24,7 @@ export function useBlogManager(initialBlogs) {
     mode: "add",
     selectedBlog: null,
     isLoading: false,
+    serverErrors: {},
   });
   const [isPending, startTransition] = useTransition();
 
@@ -32,11 +34,18 @@ export function useBlogManager(initialBlogs) {
       mode,
       selectedBlog: blog,
       isLoading: false,
+      serverErrors: {},
     });
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, isOpen: false, isLoading: false }));
+    setModalState((prev) => ({
+      ...prev,
+      isOpen: false,
+      isLoading: false,
+      selectedBlog: null,
+      serverErrors: {},
+    }));
   }, []);
 
   const handleAdd = useCallback(() => openModal("add"), [openModal]);
@@ -74,7 +83,7 @@ export function useBlogManager(initialBlogs) {
       const { mode, selectedBlog } = modalState;
       const isAddMode = mode === "add";
 
-      setModalState((prev) => ({ ...prev, isLoading: true }));
+      setModalState((prev) => ({ ...prev, isLoading: true, serverErrors: {} }));
 
       const form = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -89,8 +98,8 @@ export function useBlogManager(initialBlogs) {
 
       startTransition(async () => {
         const response = isAddMode ? await addBlog(form) : await editBlog(form);
-        const { data } = response.data;
         if (response.success) {
+          const { data } = response;
           setBlogs((prev) =>
             isAddMode
               ? [...prev, data]
@@ -103,8 +112,12 @@ export function useBlogManager(initialBlogs) {
           );
           closeModal();
         } else {
-          setModalState((prev) => ({ ...prev, isLoading: false }));
-          toast.error(response.error || TOAST_MESSAGES.error);
+          setModalState((prev) => ({
+            ...prev,
+            isLoading: false,
+            serverErrors: response.errors || {},
+          }));
+          toast.error(response.message || TOAST_MESSAGES.error);
         }
       });
     },
@@ -120,5 +133,6 @@ export function useBlogManager(initialBlogs) {
     handleDelete,
     handleSubmit,
     closeModal,
+    blogSchema,
   };
 }

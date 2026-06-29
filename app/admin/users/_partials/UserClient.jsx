@@ -14,6 +14,8 @@ const UserClient = ({ users: initialUsers }) => {
     handleDelete,
     handleSubmit,
     closeModal,
+    userSchema,
+    profileUpdateSchema,
   } = useUserManager(initialUsers);
   const columns = [
     { key: "username", label: "نام کاربری" },
@@ -90,9 +92,11 @@ const UserClient = ({ users: initialUsers }) => {
         title={
           modalState.mode === "add" ? "افزودن کاربر جدید" : "ویرایش نقش کاربر"
         }
-        initialData={modalState.selectedBlog || {}}
+        initialData={modalState.selectedUser || {}}
         fields={modalState.mode === "add" ? addUserFields : editUserFields}
         isLoading={modalState.isPending}
+        serverErrors={modalState.serverErrors}
+        schema={modalState.mode === "add" ? userSchema : profileUpdateSchema}
       />
     </>
   );

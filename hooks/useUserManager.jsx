@@ -6,6 +6,7 @@ import {
   removeUser,
 } from "@/app/admin/users/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
+import { profileUpdateSchema, userSchema } from "@/utils/FormValidation";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
@@ -23,6 +24,7 @@ export function useUserManager(initialUsers) {
     mode: "add",
     selectedUser: null,
     isLoading: false,
+    serverErrors: {},
   });
   const [isPending, startTransition] = useTransition();
 
@@ -32,11 +34,17 @@ export function useUserManager(initialUsers) {
       mode,
       selectedUser: user,
       isLoading: false,
+      serverErrors: {},
     });
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, isOpen: false, isLoading: false }));
+    setModalState((prev) => ({
+      ...prev,
+      isOpen: false,
+      isLoading: false,
+      serverErrors: {},
+    }));
   }, []);
 
   const handleAdd = useCallback(() => openModal("add"), [openModal]);
@@ -59,7 +67,6 @@ export function useUserManager(initialUsers) {
       formData.append("id", id);
 
       const response = await removeUser(formData);
-      console.log(response);
       if (response.success) {
         setUsers((prev) => prev.filter((user) => user.id !== id));
         toast.success(TOAST_MESSAGES.deleteSuccess);
@@ -92,12 +99,12 @@ export function useUserManager(initialUsers) {
           ? await addUser(form)
           : await editUserRole(form);
         if (response.success) {
-          const { data } = response.data;
+          const { user } = response.data;
           setUsers((prev) =>
             isAddMode
-              ? [...prev, data.user]
-              : prev.map((user) =>
-                  user.id === selectedUser?.id ? data.user : user,
+              ? [...prev, user]
+              : prev.map((prevUser) =>
+                  prevUser.id === selectedUser?.id ? user : prevUser,
                 ),
           );
           toast.success(
@@ -105,8 +112,12 @@ export function useUserManager(initialUsers) {
           );
           closeModal();
         } else {
-          setModalState((prev) => ({ ...prev, isLoading: false }));
-          toast.error(response.error || TOAST_MESSAGES.error);
+          setModalState((prev) => ({
+            ...prev,
+            isLoading: false,
+            serverErrors: response.errors || {},
+          }));
+          toast.error(response.message || TOAST_MESSAGES.error);
         }
       });
     },
@@ -122,5 +133,7 @@ export function useUserManager(initialUsers) {
     handleDelete,
     handleSubmit,
     closeModal,
+    userSchema,
+    profileUpdateSchema,
   };
 }

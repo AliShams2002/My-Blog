@@ -5,6 +5,7 @@ import {
   removeComment,
 } from "@/app/admin/comments/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
+import { commentSchema } from "@/utils/FormValidation";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
@@ -21,6 +22,7 @@ export function useCommentManager(initialComments) {
     mode: "edit", // فقط ویرایش داریم
     selectedComment: null,
     isLoading: false,
+    serverErrors: {},
   });
   const [isPending, startTransition] = useTransition();
 
@@ -31,11 +33,17 @@ export function useCommentManager(initialComments) {
       mode: "edit",
       selectedComment: comment,
       isLoading: false,
+      serverErrors: {},
     });
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, isOpen: false, isLoading: false }));
+    setModalState((prev) => ({
+      ...prev,
+      isOpen: false,
+      isLoading: false,
+      serverErrors: {},
+    }));
   }, []);
 
   const handleEdit = useCallback(
@@ -78,28 +86,35 @@ export function useCommentManager(initialComments) {
         return;
       }
 
-      setModalState((prev) => ({ ...prev, isLoading: true }));
+      setModalState((prev) => ({ ...prev, isLoading: true, serverErrors: {} }));
 
       const form = new FormData();
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          form.append(key, value);
+        }
+      });
+
       form.append("id", selectedComment.id);
-      form.append("content", formData.content);
 
       startTransition(async () => {
         const response = await editComment(form);
-
         if (response.success) {
+          const { data } = response;
           setComments((prev) =>
             prev.map((comment) =>
-              comment.id === selectedComment.id
-                ? { ...comment, content: formData.content }
-                : comment,
+              comment.id === selectedComment.id ? data : comment,
             ),
           );
           toast.success(TOAST_MESSAGES.editSuccess);
           closeModal();
         } else {
-          setModalState((prev) => ({ ...prev, isLoading: false }));
-          toast.error(response.error || TOAST_MESSAGES.error);
+          setModalState((prev) => ({
+            ...prev,
+            isLoading: false,
+            serverErrors: response.errors || {},
+          }));
+          toast.error(response.message || TOAST_MESSAGES.error);
         }
       });
     },
@@ -114,5 +129,6 @@ export function useCommentManager(initialComments) {
     handleDelete,
     handleSubmit,
     closeModal,
+    commentSchema,
   };
 }

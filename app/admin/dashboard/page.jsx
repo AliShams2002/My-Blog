@@ -42,14 +42,14 @@ const AdminDashboard = async () => {
   const statsCards = [
     {
       title: "مجموع مقالات",
-      value: blogs.length,
+      value: blogs.data.length,
       icon: FileIcon,
       color: "from-purple-500 to-pink-500",
       bgGradient: "from-purple-500/10 to-pink-500/10",
     },
     {
       title: "نظرات جدید",
-      value: comments.length,
+      value: comments.data.length,
       icon: MessageCircle,
       color: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10",
@@ -63,7 +63,7 @@ const AdminDashboard = async () => {
     },
     {
       title: "دسته بندی‌ها",
-      value: categories.length,
+      value: categories.data.length,
       icon: FolderOpen,
       color: "from-orange-500 to-red-500",
       bgGradient: "from-orange-500/10 to-red-500/10",
@@ -144,7 +144,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {blogs.slice(-3).map((post) => (
+            {blogs.data.slice(-3).map((post) => (
               <div
                 key={post.id}
                 className="flex items-start gap-3 p-2 hover:bg-gray-700/30 rounded-lg transition-colors"
@@ -185,7 +185,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {comments.slice(-3).map((comment) => (
+            {comments.data.slice(-3).map((comment) => (
               <div
                 key={comment.id}
                 className="p-2 hover:bg-gray-700/30 rounded-lg transition-colors"
@@ -224,7 +224,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {categories.slice(-3).map((category) => (
+            {categories.data.slice(-3).map((category) => (
               <div
                 key={category.id}
                 className="p-2 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors"

@@ -18,11 +18,10 @@ export const createCategory = async (params) => {
 };
 
 export const updateCategory = async (params) => {
-  const { id } = params;
   try {
-    const data = await serverFetcher(`/api/categories/${id}`, {
+    const data = await serverFetcher(`/api/categories/${params.id}`, {
       method: "PUT",
-      body: JSON.stringify(params),
+      body: JSON.stringify(params.data),
     });
     return data;
   } catch (error) {

@@ -9,7 +9,7 @@ const BlogPage = async () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 pb-4">
-      <HomeClient data={data} />
+      <HomeClient data={data.data} />
     </div>
   );
 };

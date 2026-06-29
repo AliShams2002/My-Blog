@@ -16,6 +16,7 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import { useDebounce } from "./useDebound";
+import { categorieSchema } from "@/utils/FormValidation";
 
 const TOAST_MESSAGES = {
   addSuccess: "دسته بندی با موفقیت اضافه شد",
@@ -34,6 +35,7 @@ export function useCategoryManager(initialCategories) {
     mode: "add",
     selectedCategory: null,
     isLoading: false,
+    serverErrors: {},
   });
   const [isPending, startTransition] = useTransition();
 
@@ -43,11 +45,17 @@ export function useCategoryManager(initialCategories) {
       mode,
       selectedCategory: category,
       isLoading: false,
+      serverErrors: {},
     });
   }, []);
 
   const closeModal = useCallback(() => {
-    setModalState((prev) => ({ ...prev, isOpen: false, isLoading: false }));
+    setModalState((prev) => ({
+      ...prev,
+      isOpen: false,
+      isLoading: false,
+      serverErrors: {},
+    }));
   }, []);
 
   const handleAdd = useCallback(() => openModal("add"), [openModal]);
@@ -122,7 +130,7 @@ export function useCategoryManager(initialCategories) {
           : await editCategory(form);
 
         if (response.success) {
-          const { data } = response.data;
+          const { data } = response;
           setCategories((prev) =>
             isAddMode
               ? [...prev, data]
@@ -135,8 +143,12 @@ export function useCategoryManager(initialCategories) {
           );
           closeModal();
         } else {
-          setModalState((prev) => ({ ...prev, isLoading: false }));
-          toast.error(response.error || TOAST_MESSAGES.error);
+          setModalState((prev) => ({
+            ...prev,
+            isLoading: false,
+            serverErrors: response.errors || {},
+          }));
+          toast.error(response.message || TOAST_MESSAGES.error);
         }
       });
     },
@@ -156,5 +168,6 @@ export function useCategoryManager(initialCategories) {
     handleSubmit,
     closeModal,
     isLoading,
+    categorieSchema,
   };
 }

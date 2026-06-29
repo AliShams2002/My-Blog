@@ -3,15 +3,29 @@
 import {
   createCategory,
   deleteCategory,
-  getBlogRelatedOfCategory,
   updateCategory,
 } from "@/services/CategorieService";
+import { formatZodErrors } from "@/utils/formatZodErrors";
+import { categorieSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
 
 export async function addCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
-  const data = await createCategory(rawData);
+  const userValidate = categorieSchema.safeParse(rawData);
+
+  if (!userValidate.success) {
+    const errors = formatZodErrors(userValidate.error);
+    return {
+      success: false,
+      message: "داده‌های ورودی معتبر نیستند",
+      errors: errors,
+    };
+  }
+
+  const validatedData = userValidate.data;
+
+  const data = await createCategory(validatedData);
   if (!data.success) {
     return {
       success: false,
@@ -21,15 +35,28 @@ export async function addCategory(formData) {
 
   revalidatePath(`/admin/categories`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }
 export async function editCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
-  const data = await updateCategory(rawData);
+  const userValidate = categorieSchema.safeParse(rawData);
+
+  if (!userValidate.success) {
+    const errors = formatZodErrors(userValidate.error);
+    return {
+      success: false,
+      message: "داده‌های ورودی معتبر نیستند",
+      errors: errors,
+    };
+  }
+
+  const validatedData = userValidate.data;
+  const params = {
+    id: rawData.id,
+    data: validatedData,
+  };
+  const data = await updateCategory(params);
   if (!data.success) {
     return {
       success: false,
@@ -39,10 +66,7 @@ export async function editCategory(formData) {
 
   revalidatePath(`/admin/categories`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }
 export async function removeCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
@@ -57,8 +81,5 @@ export async function removeCategory(formData) {
 
   revalidatePath(`/admin/categories`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }

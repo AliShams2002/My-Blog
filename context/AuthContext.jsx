@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, createContext, useEffect, useContext } from "react";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { getAuthCookies, handleDeleteCookies } from "@/app/login/_partials/action";
 
 const AuthContext = createContext(null);
 
@@ -12,40 +12,33 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const isAuthenticated = !!token;
 
   useEffect(() => {
-    const savedToken = Cookies.get("token");
-    const savedUser = Cookies.get("user");
-
-    if (savedToken) setToken(savedToken);
-    if (savedUser) setUser(JSON.parse(savedUser));
-
+    setIsLoading(true);
+    const loadUser = async () => {
+      const result = await getAuthCookies();
+      const savedToken = result.token;
+      const savedUser = result.user;
+      if (savedUser) setUser(savedUser);
+      if (savedToken) setToken(savedToken);
+    };
+    loadUser();
     setIsLoading(false);
   }, []);
 
-  const login = ({ userData, accessToken }) => {
+  const login = async ({ userData, accessToken }) => {
     setUser(userData);
     setToken(accessToken);
-
-    Cookies.set("token", accessToken, {
-      expires: 7,
-      secure: true,
-      sameSite: "strict",
-    });
-
-    Cookies.set("user", JSON.stringify(userData), {
-      expires: 7,
-      secure: true,
-      sameSite: "strict",
-    });
   };
 
-  const logout = () => {
-    Cookies.remove("token");
-    Cookies.remove("user");
+  const logout = async () => {
+    await handleDeleteCookies();
     setUser(null);
     setToken(null);
     toast.success("عملیات خروج با موفقیت انجام شد");
+    router.replace("/");
+    router.refresh();
   };
 
   return (
@@ -57,7 +50,7 @@ export function AuthProvider({ children }) {
         logout,
         isLoading,
         setIsLoading,
-        isAuthenticated: !!token,
+        isAuthenticated,
       }}
     >
       {children}

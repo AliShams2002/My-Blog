@@ -24,11 +24,10 @@ export const createComment = async (params) => {
 };
 
 export const updateComment = async (params) => {
-  const { id } = params;
   try {
-    const data = await serverFetcher(`/api/comments/${id}`, {
+    const data = await serverFetcher(`/api/comments/${params.id}`, {
       method: "PUT",
-      body: JSON.stringify(params),
+      body: JSON.stringify(params.data),
     });
     return data;
   } catch (error) {

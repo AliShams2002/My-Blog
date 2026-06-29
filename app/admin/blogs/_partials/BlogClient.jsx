@@ -14,6 +14,7 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
     handleDelete,
     handleSubmit,
     closeModal,
+    blogSchema,
   } = useBlogManager(initialBlogs);
   const columns = [
     { key: "image", label: "تصویر" },
@@ -85,6 +86,8 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
         initialData={modalState.selectedBlog || {}}
         fields={blogFields}
         isLoading={modalState.isPending}
+        serverErrors={modalState.serverErrors}
+        schema={blogSchema}
       />
     </>
   );

@@ -10,8 +10,6 @@ export const loginUser = async (params, login) => {
     toast.success("عملیات ورود با موفقیت انجام شد");
     login({ userData: data.user, accessToken: data.token });
   } catch (error) {
-    console.log(error);
-    const serverMassage = error.response?.data?.message;
-    toast.error(serverMassage);
+    toast.error(error.message);
   }
 };

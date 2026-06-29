@@ -18,6 +18,7 @@ const CategoriesClient = ({ categories: initialCategories }) => {
     handleSubmit,
     closeModal,
     isLoading,
+    categorieSchema,
   } = useCategoryManager(initialCategories);
 
   const categoryFields = [
@@ -67,6 +68,8 @@ const CategoriesClient = ({ categories: initialCategories }) => {
         initialData={modalState.selectedCategory || {}}
         fields={categoryFields}
         isLoading={modalState.isLoading}
+        serverErrors={modalState.serverErrors}
+        schema={categorieSchema}
       />
     </>
   );

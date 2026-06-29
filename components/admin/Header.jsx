@@ -26,21 +26,25 @@ const Header = ({
 
         {/* User Profile - با Hover Card */}
         <div className="relative">
-          <div
-            className="flex items-center gap-3 cursor-pointer hover:bg-gray-800/50 rounded-lg px-3 py-2 transition-all duration-200"
-            onMouseEnter={() => setShowUserCard(true)}
-            onMouseLeave={() => setShowUserCard(false)}
-          >
-            <div className="text-left">
-              <p className="text-sm font-medium text-white">{user.username}</p>
-              <p className="text-xs text-gray-400">
-                {user.role === "admin" ? "مدیر سیستم" : user.role}
-              </p>
+          {user && (
+            <div
+              className="flex items-center gap-3 cursor-pointer hover:bg-gray-800/50 rounded-lg px-3 py-2 transition-all duration-200"
+              onMouseEnter={() => setShowUserCard(true)}
+              onMouseLeave={() => setShowUserCard(false)}
+            >
+              <div className="text-left">
+                <p className="text-sm font-medium text-white">
+                  {user.username}
+                </p>
+                <p className="text-xs text-gray-400">
+                  {user?.role === "admin" ? "مدیر سیستم" : user.role}
+                </p>
+              </div>
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-medium shadow-lg">
+                <span>{user?.username?.charAt(0).toUpperCase()}</span>
+              </div>
             </div>
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-medium shadow-lg">
-              <span>{user.username?.charAt(0).toUpperCase()}</span>
-            </div>
-          </div>
+          )}
 
           {/* User Info Card - Hover Card */}
           {showUserCard && (

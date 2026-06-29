@@ -26,7 +26,7 @@ export const updateBlog = async (params) => {
   try {
     const data = await serverFetcher(`/api/articles/${params.id}`, {
       method: "PUT",
-      body: JSON.stringify(params),
+      body: JSON.stringify(params.data),
     });
     return data;
   } catch (error) {

@@ -85,7 +85,7 @@ const Header = () => {
               </a>
             ))}
           </div>
-          {isAuthenticated ? (
+          {isAuthenticated && user ? (
             <div>
               <div className="relative flex items-center gap-2" ref={moduleRef}>
                 <span

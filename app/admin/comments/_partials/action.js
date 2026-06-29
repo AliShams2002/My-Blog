@@ -4,62 +4,69 @@ import {
   deleteComment,
   updateComment,
 } from "@/services/CommentService";
+import { formatZodErrors } from "@/utils/formatZodErrors";
+import { commentSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
 
 export async function addComment(formData) {
-  try {
-    const rawData = Object.fromEntries(formData.entries());
+  const rawData = Object.fromEntries(formData.entries());
 
-    const data = await createComment(rawData);
+  const commentValidate = commentSchema.parse(rawData);
 
-    revalidatePath(`/admin/blogs`);
+  if (!commentValidate) return;
 
-    return {
-      success: true,
-      data,
-    };
-  } catch (error) {
+  const data = await createComment(rawData);
+  if (!data.success) {
     return {
       success: false,
-      error: error.message,
+      error: data.message,
     };
   }
+  revalidatePath(`/blog/${rawData.id}`);
+
+  return data;
 }
 export async function editComment(formData) {
-  try {
-    const rawData = Object.fromEntries(formData.entries());
+  const rawData = Object.fromEntries(formData.entries());
 
-    const data = await updateComment(rawData);
+  const userValidate = commentSchema.safeParse(rawData);
 
-    revalidatePath(`/admin/blogs`);
-
-    return {
-      success: true,
-      data,
-    };
-  } catch (error) {
+  if (!userValidate.success) {
+    const errors = formatZodErrors(userValidate.error);
     return {
       success: false,
-      error: error.message,
+      message: "داده‌های ورودی معتبر نیستند",
+      errors: errors,
     };
   }
+
+  const validatedData = userValidate.data;
+  const params = {
+    id: rawData.id,
+    data: validatedData,
+  };
+  const data = await updateComment(params);
+  if (!data.success) {
+    return {
+      success: false,
+      error: data.message,
+    };
+  }
+  revalidatePath(`/admin/comments`);
+
+  return data;
 }
 export async function removeComment(formData) {
-  try {
-    const rawData = Object.fromEntries(formData.entries());
+  const rawData = Object.fromEntries(formData.entries());
 
-    const data = await deleteComment(rawData);
-
-    revalidatePath(`/admin/blogs`);
-
-    return {
-      success: true,
-      data,
-    };
-  } catch (error) {
+  const data = await deleteComment(rawData);
+  if (!data.success) {
     return {
       success: false,
-      error: error.message,
+      error: data.message,
     };
   }
+  revalidatePath(`/admin/comments`);
+
+  return data;
 }
