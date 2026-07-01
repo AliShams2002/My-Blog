@@ -6,9 +6,10 @@ import Footer from "@/components/site/Footer";
 import Header from "@/components/site/Header";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export default function LayoutContent({ children }) {
-  const { isLoading } = useAuth();
+  const { isLoading, user } = useAuth();
   const pathname = usePathname();
 
   const isAdminRoute = pathname?.startsWith("/admin");

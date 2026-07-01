@@ -4,11 +4,15 @@ import { LayoutDashboard, LogOut, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import MobileMenu from "./MobileMenu";
+import { eventEmitter } from "@/utils/eventEmitter";
+import { getAuthCookies } from "@/app/login/_partials/action";
 
 const Header = () => {
   const { user, isAuthenticated, logout } = useAuth();
+  const [isLogin, setIsLogin] = useState(isAuthenticated);
   const [isModuleOpen, setIsModuleOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
   const moduleRef = useRef(null);
 
   const menuItems = [
@@ -16,6 +20,14 @@ const Header = () => {
     { lable: "درباره ما", href: "#" },
     { lable: "تماس با ما", href: "#" },
   ];
+
+  useEffect(() => {
+    const check = async () => {
+      const coockies = await getAuthCookies();
+      setIsLogin(coockies.token ? true : false);
+    };
+    check();
+  }, [user, refreshTrigger]);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -52,7 +64,10 @@ const Header = () => {
   const openMenu = () => setIsMenuOpen(true);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/10 backdrop-blur-lg">
+    <header
+      key={refreshTrigger}
+      className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/10 backdrop-blur-lg"
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-16 py-4">
         <div className="w-full flex items-center justify-between">
           <MobileMenu
@@ -85,7 +100,7 @@ const Header = () => {
               </a>
             ))}
           </div>
-          {isAuthenticated && user ? (
+          {isLogin && user ? (
             <div>
               <div className="relative flex items-center gap-2" ref={moduleRef}>
                 <span

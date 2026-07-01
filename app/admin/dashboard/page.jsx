@@ -2,21 +2,9 @@ import {
   MessageCircle,
   FolderTree,
   Users,
-  Plus,
-  Search,
-  Filter,
-  MoreVertical,
-  Eye,
-  Edit,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Clock,
   FileText as FileIcon,
   UserCheck,
   FolderOpen,
-  Star,
-  TrendingUp,
   MessageSquare,
   FileText,
   User,
@@ -32,7 +20,12 @@ import Skeleton from "@/components/admin/SkeletonLoading";
 export const dynamic = "force-dynamic";
 
 const AdminDashboard = async () => {
-  const [blogs, categories, comments, users] = await Promise.all([
+  const [
+    { data: blogs },
+    { data: categories },
+    { data: comments },
+    { data: users },
+  ] = await Promise.all([
     getAllBlogs(),
     getAllCategories(),
     getAllComments(),
@@ -42,28 +35,28 @@ const AdminDashboard = async () => {
   const statsCards = [
     {
       title: "مجموع مقالات",
-      value: blogs.data.length,
+      value: blogs.length,
       icon: FileIcon,
       color: "from-purple-500 to-pink-500",
       bgGradient: "from-purple-500/10 to-pink-500/10",
     },
     {
       title: "نظرات جدید",
-      value: comments.data.length,
+      value: comments.length,
       icon: MessageCircle,
       color: "from-blue-500 to-cyan-500",
       bgGradient: "from-blue-500/10 to-cyan-500/10",
     },
     {
       title: "کاربران فعال",
-      value: users.data.length,
+      value: users.length,
       icon: UserCheck,
       color: "from-green-500 to-emerald-500",
       bgGradient: "from-green-500/10 to-emerald-500/10",
     },
     {
       title: "دسته بندی‌ها",
-      value: categories.data.length,
+      value: categories.length,
       icon: FolderOpen,
       color: "from-orange-500 to-red-500",
       bgGradient: "from-orange-500/10 to-red-500/10",
@@ -144,7 +137,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {blogs.data.slice(-3).map((post) => (
+            {blogs.slice(-3).map((post) => (
               <div
                 key={post.id}
                 className="flex items-start gap-3 p-2 hover:bg-gray-700/30 rounded-lg transition-colors"
@@ -185,7 +178,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {comments.data.slice(-3).map((comment) => (
+            {comments.slice(-3).map((comment) => (
               <div
                 key={comment.id}
                 className="p-2 hover:bg-gray-700/30 rounded-lg transition-colors"
@@ -224,7 +217,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {categories.data.slice(-3).map((category) => (
+            {categories.slice(-3).map((category) => (
               <div
                 key={category.id}
                 className="p-2 bg-gray-700/30 rounded-lg hover:bg-gray-700/50 transition-colors"
@@ -262,7 +255,7 @@ const AdminDashboard = async () => {
             </Link>
           </div>
           <div className="space-y-3">
-            {users.data.slice(-3).map((user) => (
+            {users.slice(-3).map((user) => (
               <div
                 key={user.id}
                 className="flex items-center justify-between p-2 hover:bg-gray-700/30 rounded-lg transition-colors"

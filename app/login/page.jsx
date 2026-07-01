@@ -1,16 +1,12 @@
 "use client";
 
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
-import React, { useEffect } from "react";
+import React from "react";
 import { Lock, ArrowRight, Sparkles, User } from "lucide-react";
 import { useLoginManager } from "@/hooks/useLoginManager";
 
 const Login = () => {
   const { handleSubmit, register, isSubmitting, errors } = useLoginManager();
-
-  useEffect(() => {
-
-  }, [register])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
@@ -49,7 +45,7 @@ const Login = () => {
                   </div>
                   {errors.username && (
                     <p className="text-red-500 text-sm">
-                      {errors.username.message}
+                      {errors.username?.message}
                     </p>
                   )}
                 </div>

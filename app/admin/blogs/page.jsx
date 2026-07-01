@@ -5,8 +5,8 @@ import BlogClient from "./_partials/BlogClient";
 
 export const dynamic = "force-dynamic";
 const Page = async () => {
-  const blogs = await getAllBlogs();
-  const categories = await getAllCategories();
+  const { data: blogs } = await getAllBlogs();
+  const { data: categories } = await getAllCategories();
 
   if (!blogs && !categories) return <Skeleton />;
 

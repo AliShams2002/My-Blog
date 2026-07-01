@@ -5,7 +5,7 @@ import CommentClient from "./_partials/CommentClient";
 
 export const dynamic = "force-dynamic";
 const Page = async () => {
-  const [comments, categories] = await Promise.all([
+  const [{ data: comments }, { data: categories }] = await Promise.all([
     getAllComments(),
     getAllCategories(),
   ]);

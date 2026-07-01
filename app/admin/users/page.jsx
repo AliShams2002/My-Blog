@@ -5,11 +5,11 @@ import UserClient from "./_partials/UserClient";
 
 export const dynamic = "force-dynamic";
 const Page = async () => {
-  const users = await getAllUsers();
+  const { data: users } = await getAllUsers();
 
   if (!users) return <Skeleton />;
 
-  return <UserClient users={users.data} />;
+  return <UserClient users={users} />;
 };
 
 export default Page;

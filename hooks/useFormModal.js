@@ -21,7 +21,6 @@ export const useFormModal = ({
   onSubmit,
   onClose,
   isOpen,
-  // ✅ اضافه کردن props جدید برای خطاهای سرور
   serverErrors: initialServerErrors = {},
   serverMessage: initialServerMessage = "",
 }) => {

@@ -8,12 +8,12 @@ import Skeleton from "@/components/admin/SkeletonLoading";
 
 export const dynamic = "force-dynamic";
 const Page = async () => {
-  const categories = await getAllCategories();
+  const { data: categories } = await getAllCategories();
 
   const categoriesWithCount = await Promise.all(
     categories.map(async (category) => {
       try {
-        const articles = await getBlogRelatedOfCategory(category.id);
+        const { data: articles } = await getBlogRelatedOfCategory(category.id);
         return {
           ...category,
           articlesCount: articles?.length || 0,

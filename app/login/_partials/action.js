@@ -8,20 +8,18 @@ import { redirect } from "next/navigation";
 export async function loginAction(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
-  //   const userValidate = loginSchema.safeParse(rawData);
+  const userValidate = loginSchema.safeParse(rawData);
 
-  //   console.log(userValidate);
-  //   if (!userValidate.success) {
-  //     const errors = formatZodErrors(userValidate.error);
-  //     return {
-  //       success: false,
-  //       message: "داده‌های ورودی معتبر نیستند",
-  //       errors: errors,
-  //     };
-  //   }
-  //   const validatedData = userValidate.data;
-  //   console.log(validatedData);
-  const data = await loginUser(rawData);
+  if (!userValidate.success) {
+    const errors = formatZodErrors(userValidate.error);
+    return {
+      success: false,
+      message: "داده‌های ورودی معتبر نیستند",
+      errors: errors,
+    };
+  }
+  const validatedData = userValidate.data;
+  const data = await loginUser(validatedData);
   console.log(data);
   if (!data.success) {
     return {
@@ -53,9 +51,14 @@ export async function loginAction(formData) {
 
 export async function getAuthCookies() {
   const cookieStore = await cookies();
-  const token = cookieStore.get("token");
-  const user = cookieStore.get("user");
-  return { success: true, token, user };
+  const token = cookieStore.get("token")?.value;
+  const user = cookieStore.get("user")?.value;
+
+  return {
+    success: true,
+    token: token || null,
+    user: user ? JSON.parse(user) : null,
+  };
 }
 
 export async function handleDeleteCookies() {

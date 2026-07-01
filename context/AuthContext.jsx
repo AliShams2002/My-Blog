@@ -3,7 +3,11 @@
 import { useState, createContext, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { getAuthCookies, handleDeleteCookies } from "@/app/login/_partials/action";
+import {
+  getAuthCookies,
+  handleDeleteCookies,
+} from "@/app/login/_partials/action";
+import { eventEmitter } from "@/utils/eventEmitter";
 
 const AuthContext = createContext(null);
 
@@ -37,8 +41,8 @@ export function AuthProvider({ children }) {
     setUser(null);
     setToken(null);
     toast.success("عملیات خروج با موفقیت انجام شد");
+    eventEmitter.emit("refresh-header");
     router.replace("/");
-    router.refresh();
   };
 
   return (

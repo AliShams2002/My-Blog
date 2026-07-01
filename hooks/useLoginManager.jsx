@@ -19,17 +19,31 @@ export function useLoginManager() {
     handleSubmit,
     formState: { isSubmitting },
     formState: { errors },
+    setError,
+    clearErrors,
   } = useForm({ resolver: zodResolver(loginSchema) });
   const { user, isAuthenticated, isLoading, login } = useAuth();
   const router = useRouter();
-  const [modalState, setModalState] = useState({
-    isLoading: false,
-    serverErrors: {},
-  });
+  const [isLoadingState, setIsLoadingState] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  const handleErrors = (errors = null) => {
+    if (errors && Object.keys(errors).length > 0) {
+      clearErrors();
+
+      Object.keys(errors).forEach((fieldName) => {
+        if (fieldName !== "_form") {
+          setError(fieldName, {
+            type: "server",
+            message: errors[fieldName],
+          });
+        }
+      });
+    }
+  };
+
   const handleSubmitForm = useCallback(async (formData) => {
-    setModalState((prev) => ({ ...prev, isLoading: true }));
+    setIsLoadingState(true);
 
     const form = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
@@ -45,18 +59,14 @@ export function useLoginManager() {
         toast.success(TOAST_MESSAGES.loginSuccess);
         router.push("admin/dashboard");
       } else {
-        setModalState((prev) => ({
-          ...prev,
-          isLoading: false,
-          serverErrors: response.errors || {},
-        }));
-        toast.error(response.message || TOAST_MESSAGES.error);
+        handleErrors(response.errors);
+        setIsLoadingState(false);
+        toast.error(response.message || response.error || TOAST_MESSAGES.error);
       }
     });
   }, []);
 
   return {
-    modalState,
     handleSubmit: handleSubmit(handleSubmitForm),
     isPending,
     register,
