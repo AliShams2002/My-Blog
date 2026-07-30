@@ -5,9 +5,11 @@ import { formatZodErrors } from "@/utils/formatZodErrors";
 import { profileUpdateSchema, userSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
 
+// Server action for adding a new user
 export async function addUser(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
+  // Validate user data against schema
   const userValidate = userSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -28,12 +30,17 @@ export async function addUser(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the users page to reflect changes
   revalidatePath(`/admin/users`);
   return data;
 }
+
+// Server action for editing a user's role
 export async function editUserRole(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
+  // Validate role data against profile update schema
   const userValidate = profileUpdateSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -57,10 +64,14 @@ export async function editUserRole(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the users page to reflect changes
   revalidatePath(`/admin/users`);
 
   return data;
 }
+
+// Server action for deleting a user
 export async function removeUser(formData) {
   const rawData = Object.fromEntries(formData.entries());
   const data = await deleteUser(rawData);
@@ -70,6 +81,8 @@ export async function removeUser(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the users page to reflect changes
   revalidatePath(`/admin/users`);
 
   return {

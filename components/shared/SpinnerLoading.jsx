@@ -1,3 +1,5 @@
+
+// SpinnerLoading component for use across the entire project
 const SpinnerLoading = ({ width, height }) => {
   return (
     <svg

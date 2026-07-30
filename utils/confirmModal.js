@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 
+// Displays a confirmation dialog with custom messages and button labels
 export const confirmModal = async (message, confirmBtn, cancelBtn) => {
   return await Swal.fire({
     title: message,

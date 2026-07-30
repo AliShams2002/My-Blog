@@ -1,27 +1,34 @@
 "use client";
-import getCategoryNameById from "@/utils/categotyHelpers";
 import { createContext, useContext } from "react";
 
 const CategoriesContext = createContext(null);
 
 export default function CategoriesProvider({ categoriesData, children }) {
+  // Return all categories
   const getAllCategories = () => {
     return categoriesData;
   };
 
+  // Return all categories and add an "All" category
   const getCategoriesWithAll = () => {
     const allCategoryOption = { id: "all", title: "همه" };
     return [allCategoryOption, ...categoriesData];
   };
 
+  // Return data about an category by ID
   const getCategoryName = (id) => {
     if (!id) return;
-    return getCategoryNameById(categoriesData, id);
+    const { title } = categoriesData.find((c) => c.id == id);
+    return title;
   };
 
   return (
     <CategoriesContext.Provider
-      value={{ getAllCategories, getCategoriesWithAll, getCategoryName }}
+      value={{
+        getAllCategories,
+        getCategoriesWithAll,
+        getCategoryName,
+      }}
     >
       {children}
     </CategoriesContext.Provider>

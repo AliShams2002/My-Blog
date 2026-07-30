@@ -3,11 +3,12 @@ import { loginUser } from "@/services/UserService";
 import { loginSchema } from "@/utils/AuthValidation";
 import { formatZodErrors } from "@/utils/formatZodErrors";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export async function loginAction(formData) {
+  // Get form data
   const rawData = Object.fromEntries(formData.entries());
 
+  // Server-side data validation
   const userValidate = loginSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -18,9 +19,11 @@ export async function loginAction(formData) {
       errors: errors,
     };
   }
-  const validatedData = userValidate.data;
+  const { data: validatedData } = userValidate;
+
+  // Post data to the backend
   const data = await loginUser(validatedData);
-  console.log(data);
+
   if (!data.success) {
     return {
       success: false,
@@ -30,19 +33,22 @@ export async function loginAction(formData) {
   const token = data.data.token;
   const user = JSON.stringify(data.data.user);
   const cookieStore = await cookies();
+
+  // Token storage
   cookieStore.set("token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 روز
+    maxAge: 60 * 60 * 24 * 7, // 7 day
     path: "/",
   });
 
+  // User storage
   cookieStore.set("user", user, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 7, // 7 روز
+    maxAge: 60 * 60 * 24 * 7, // 7 day
     path: "/",
   });
 
@@ -51,6 +57,7 @@ export async function loginAction(formData) {
 
 export async function getAuthCookies() {
   const cookieStore = await cookies();
+  // Get coockies
   const token = cookieStore.get("token")?.value;
   const user = cookieStore.get("user")?.value;
 
@@ -63,6 +70,7 @@ export async function getAuthCookies() {
 
 export async function handleDeleteCookies() {
   const cookieStore = await cookies();
+  // Remove coockies
   cookieStore.delete("token");
   cookieStore.delete("user");
   return { success: true };

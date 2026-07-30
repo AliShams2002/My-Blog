@@ -5,6 +5,7 @@ import FormModal from "@/components/admin/FormModal";
 import { useBlogManager } from "@/hooks/useBlogManager";
 
 const BlogClient = ({ blogs: initialBlogs, categories }) => {
+  // Initialize blog management hook with initial data
   const {
     blogs,
     modalState,
@@ -15,7 +16,9 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
     handleSubmit,
     closeModal,
     blogSchema,
-  } = useBlogManager(initialBlogs);
+  } = useBlogManager(initialBlogs, categories);
+
+  // Table column configuration
   const columns = [
     { key: "image", label: "تصویر" },
     { key: "title", label: "عنوان" },
@@ -24,6 +27,7 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
     { key: "createdAt", label: "تاریخ" },
   ];
 
+  // Form fields for adding/editing blogs
   const blogFields = [
     {
       name: "title",
@@ -52,6 +56,7 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
       label: "دسته بندی",
       type: "select",
       required: true,
+      // Map categories to select options format
       options: categories.map((c) => ({ value: c.id, label: c.title })),
     },
     {
@@ -65,6 +70,7 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
 
   return (
     <>
+      {/* Blog management table with CRUD operations */}
       <ReusableTable
         columns={columns}
         data={blogs}
@@ -77,6 +83,8 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
         onDelete={handleDelete}
         isLoading={isPending}
       />
+
+      {/* Modal for adding or editing blogs */}
       <FormModal
         isOpen={modalState.isOpen}
         onClose={closeModal}

@@ -7,9 +7,11 @@ import {
 } from "@/app/admin/users/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
 import { profileUpdateSchema, userSchema } from "@/utils/FormValidation";
+import { recentData } from "@/utils/recentHelpers";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
+// Centralized toast message configuration
 const TOAST_MESSAGES = {
   addSuccess: "کاربر با موفقیت اضافه شد",
   editSuccess: "کاربر با موفقیت ویرایش شد",
@@ -18,7 +20,8 @@ const TOAST_MESSAGES = {
 };
 
 export function useUserManager(initialUsers) {
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState(recentData(initialUsers));
+  // Manages modal state including open/close, mode, selected user, loading, and server errors
   const [modalState, setModalState] = useState({
     isOpen: false,
     mode: "add",
@@ -28,6 +31,7 @@ export function useUserManager(initialUsers) {
   });
   const [isPending, startTransition] = useTransition();
 
+  // Opens the modal with specified mode and optional user data for editing
   const openModal = useCallback((mode, user = null) => {
     setModalState({
       isOpen: true,
@@ -38,6 +42,7 @@ export function useUserManager(initialUsers) {
     });
   }, []);
 
+  // Closes the modal and resets its state
   const closeModal = useCallback(() => {
     setModalState((prev) => ({
       ...prev,
@@ -53,6 +58,7 @@ export function useUserManager(initialUsers) {
     [openModal],
   );
 
+  // Handles user deletion with confirmation dialog
   const handleDelete = useCallback(async (id) => {
     const confirmed = await confirmModal(
       "آیا از حذف این کاربر مطمئن هستید؟",
@@ -76,6 +82,7 @@ export function useUserManager(initialUsers) {
     });
   }, []);
 
+  // Handles both add and edit form submissions
   const handleSubmit = useCallback(
     async (formData) => {
       const { mode, selectedUser } = modalState;
@@ -90,6 +97,7 @@ export function useUserManager(initialUsers) {
         }
       });
 
+      // Append the user ID for edit operations
       if (!isAddMode && selectedUser?.id) {
         form.append("id", selectedUser.id);
       }
@@ -100,9 +108,10 @@ export function useUserManager(initialUsers) {
           : await editUserRole(form);
         if (response.success) {
           const { user } = response.data;
+          // Update the users list based on operation type
           setUsers((prev) =>
             isAddMode
-              ? [...prev, user]
+              ? [user, ...prev]
               : prev.map((prevUser) =>
                   prevUser.id === selectedUser?.id ? user : prevUser,
                 ),

@@ -8,12 +8,9 @@ import { formatZodErrors } from "@/utils/formatZodErrors";
 import { commentSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
 
+// Server action for adding a new comment
 export async function addComment(formData) {
   const rawData = Object.fromEntries(formData.entries());
-
-  const commentValidate = commentSchema.parse(rawData);
-
-  if (!commentValidate) return;
 
   const data = await createComment(rawData);
   if (!data.success) {
@@ -22,13 +19,18 @@ export async function addComment(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the blog page to show the new comment
   revalidatePath(`/blog/${rawData.id}`);
 
   return data;
 }
+
+// Server action for editing a comment
 export async function editComment(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
+  // Validate comment data against schema
   const userValidate = commentSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -52,10 +54,14 @@ export async function editComment(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the admin comments page to reflect changes
   revalidatePath(`/admin/comments`);
 
   return data;
 }
+
+// Server action for deleting a comment
 export async function removeComment(formData) {
   const rawData = Object.fromEntries(formData.entries());
 

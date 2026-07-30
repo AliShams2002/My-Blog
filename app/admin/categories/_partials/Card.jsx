@@ -4,6 +4,7 @@ import { Edit, FolderOpen, Plus, Trash2 } from "lucide-react";
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
 
 const Card = ({ categories, handleEdit, handleDelete, isLoading }) => {
+  // Show loading spinner while data is being fetched
   if (isLoading)
     return (
       <div className="text-center pt-4">
@@ -11,6 +12,7 @@ const Card = ({ categories, handleEdit, handleDelete, isLoading }) => {
       </div>
     );
 
+  // Show empty state when no categories exist
   if (!categories.length)
     return (
       <div className="py-3 text-center text-gray-400">
@@ -37,9 +39,12 @@ const Card = ({ categories, handleEdit, handleDelete, isLoading }) => {
           </p>
 
           <div className="flex items-center justify-between pt-3 border-t border-gray-700/50">
+            {/* Blog count */}
             <span className="text-xs text-gray-400">
               📄 {category.articlesCount} مقاله
             </span>
+
+            {/* Action buttons */}
             <div className="flex gap-2">
               <button
                 onClick={(e) => {
@@ -50,6 +55,7 @@ const Card = ({ categories, handleEdit, handleDelete, isLoading }) => {
               >
                 <Edit className="w-3 h-3" />
               </button>
+              {/* Delete button - disabled if category has articles */}
               <button
                 disabled={category.articlesCount}
                 onClick={() => handleDelete(category.id)}

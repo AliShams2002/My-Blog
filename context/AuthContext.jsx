@@ -7,7 +7,6 @@ import {
   getAuthCookies,
   handleDeleteCookies,
 } from "@/app/login/_partials/action";
-import { eventEmitter } from "@/utils/eventEmitter";
 
 const AuthContext = createContext(null);
 
@@ -16,8 +15,8 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const isAuthenticated = !!token;
 
+  // Loading user data
   useEffect(() => {
     setIsLoading(true);
     const loadUser = async () => {
@@ -31,17 +30,18 @@ export function AuthProvider({ children }) {
     setIsLoading(false);
   }, []);
 
+  // Login
   const login = async ({ userData, accessToken }) => {
     setUser(userData);
     setToken(accessToken);
   };
 
+  // Logout
   const logout = async () => {
     await handleDeleteCookies();
     setUser(null);
     setToken(null);
     toast.success("عملیات خروج با موفقیت انجام شد");
-    eventEmitter.emit("refresh-header");
     router.replace("/");
   };
 
@@ -54,7 +54,7 @@ export function AuthProvider({ children }) {
         logout,
         isLoading,
         setIsLoading,
-        isAuthenticated,
+        isAuthenticated: !!token,
       }}
     >
       {children}

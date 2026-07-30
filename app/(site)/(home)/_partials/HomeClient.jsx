@@ -2,39 +2,56 @@
 
 import React from "react";
 import Categories from "./Categories";
-import FeaturedBlogs from "./FeaturedBlogs";
 import { useHomePageManager } from "@/hooks/useHomePageManager";
+import Blogs from "./Blogs";
 
 const HomeClient = ({ data: initialBlogs }) => {
   const {
     catsWithAllOption,
     handleSearchFilter,
     handleActiveFilter,
-    handleFilter,
-    pageState,
+    filteredAndSortedPosts,
+    setCurrentPage,
+    currentPage,
+    setSortBy,
+    sortBy,
+    modalState,
     getCategoryName,
+    totalPages,
+    paginatedBlogs,
+    resetFilter,
+    setIsLoading,
     isLoading,
   } = useHomePageManager(initialBlogs);
 
   return (
     <>
-      {/* Advanced Section */}
+      {/* Advanced section */}
       <Categories
         initialCategories={catsWithAllOption}
+        filteredBlogs={filteredAndSortedPosts}
         setActiveFilter={handleActiveFilter}
-        activeFilter={pageState.activeFilter}
+        activeFilter={modalState.activeFilter}
         setSearchTerm={handleSearchFilter}
-        searchTerm={pageState.searchTerm}
+        searchTerm={modalState.searchTerm}
+        setSortBy={setSortBy}
+        sortBy={sortBy}
       />
 
-      {/* Articles Grid */}
-      <FeaturedBlogs
+      {/* Blogs grid */}
+      <Blogs
         getCatById={getCategoryName}
-        featuredBlog={pageState.featuredBlog}
-        activeFilter={pageState.activeFilter}
-        filteredBlogs={handleFilter}
-        searchTerm={pageState.searchTerm}
+        featuredBlog={modalState.featuredBlog}
+        activeFilter={modalState.activeFilter}
+        filteredBlogs={filteredAndSortedPosts}
+        searchTerm={modalState.searchTerm}
+        setIsLoading={setIsLoading}
         isLoading={isLoading}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        paginatedBlogs={paginatedBlogs}
+        resetFilter={resetFilter}
       />
     </>
   );

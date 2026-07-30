@@ -6,6 +6,7 @@ import { useCategoryManager } from "@/hooks/useCategoryManager";
 import Header from "./Header";
 
 const CategoriesClient = ({ categories: initialCategories }) => {
+  // Initialize category management hook with initial data
   const {
     setSearchTerm,
     searchTerm,
@@ -21,6 +22,7 @@ const CategoriesClient = ({ categories: initialCategories }) => {
     categorieSchema,
   } = useCategoryManager(initialCategories);
 
+  // Form fields for adding/editing categories
   const categoryFields = [
     {
       name: "title",
@@ -42,11 +44,14 @@ const CategoriesClient = ({ categories: initialCategories }) => {
   return (
     <>
       <div className="space-y-4">
+        {/* Header with search and add button */}
         <Header
           handleAdd={handleAdd}
           setSearchTerm={setSearchTerm}
           searchTerm={searchTerm}
         />
+
+        {/* Cards grid displaying filtered categories */}
         <Card
           categories={filteredCategories}
           handleEdit={handleEdit}
@@ -55,6 +60,7 @@ const CategoriesClient = ({ categories: initialCategories }) => {
         />
       </div>
 
+      {/* Modal for adding or editing categories */}
       <FormModal
         isOpen={modalState.isOpen}
         onClose={closeModal}

@@ -1,4 +1,3 @@
-// components/ui/FormModal/useFormModal.js
 "use client";
 
 import { useEffect } from "react";
@@ -39,13 +38,12 @@ export const useFormModal = ({
     mode: "onChange",
   });
 
-  // ✅ تبدیل خطاهای سرور به خطاهای react-hook-form
+  // Convert server errors to react-hook-form errors
   useEffect(() => {
     if (initialServerErrors && Object.keys(initialServerErrors).length > 0) {
-      // پاک کردن خطاهای قبلی
       clearErrors();
 
-      // تنظیم خطاهای جدید
+      // Set each server error on the corresponding form field
       Object.keys(initialServerErrors).forEach((fieldName) => {
         if (fieldName !== "_form") {
           setError(fieldName, {
@@ -57,7 +55,7 @@ export const useFormModal = ({
     }
   }, [initialServerErrors, setError, clearErrors]);
 
-  // Reset فرم هنگام باز/بسته شدن
+  // Reset form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
       if (mode === "edit" && initialData) {
@@ -66,25 +64,19 @@ export const useFormModal = ({
         reset(getEmptyFormData(fields));
       }
 
-      // ✅ پاک کردن خطاها هنگام باز شدن فرم
+      // Clear errors when form opens
       clearErrors();
     }
   }, [isOpen, mode, initialData, fields, reset, clearErrors]);
 
-  // مدیریت تغییرات فایل (تبدیل به base64)
+  // Handle file input changes (convert to base64)
   const handleFileChange = (name, file) => {
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setValue(name, reader.result, { shouldValidate: true });
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setValue(name, "", { shouldValidate: true });
-    }
+    setValue(name, file, {
+      shouldValidate: true,
+    });
   };
 
-  // مدیریت تغییرات معمولی
+  // Handle regular input changes
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
 
@@ -94,16 +86,16 @@ export const useFormModal = ({
       setValue(name, value, { shouldValidate: true });
     }
 
-    // ✅ پاک کردن خطای سرور برای این فیلد هنگام تغییر
+    // Clear server error for this field when user makes changes
     if (initialServerErrors[name]) {
       clearErrors(name);
     }
   };
 
-  // submit فرم
+  // Handle form submission
   const onFormSubmit = async (data) => {
     try {
-      // ✅ پاک کردن خطاهای قبلی قبل از submit
+      // Clear previous errors before submission
       clearErrors();
 
       const result = await onSubmit(data);
@@ -114,9 +106,9 @@ export const useFormModal = ({
         return { success: true };
       }
 
-      // ❌ اگر خطا از سمت سرور برگشت
+      // Handle server validation errors
       if (result?.errors) {
-        // تنظیم خطاهای سرور در فرم
+        // Set server errors on form fields
         Object.keys(result.errors).forEach((fieldName) => {
           if (fieldName !== "_form") {
             setError(fieldName, {
@@ -136,37 +128,37 @@ export const useFormModal = ({
     }
   };
 
-  // گرفتن مقدار یک فیلد
+  // Get value of a specific field
   const getFieldValue = (name) => watch(name);
 
-  // تنظیم مقدار یک فیلد
+  // Set value of a specific field
   const setFieldValue = (name, value) => {
     setValue(name, value, { shouldValidate: true });
   };
 
-  // ✅ تابع برای دریافت خطای یک فیلد (ترکیب کلاینت و سرور)
+  // Get error message for a specific field (combines client and server errors)
   const getFieldError = (fieldName) => {
     return errors[fieldName]?.message || null;
   };
 
-  // ✅ تابع برای بررسی وجود خطا در یک فیلد
+  // Check if a field has an error
   const hasFieldError = (fieldName) => {
     return !!errors[fieldName];
   };
 
   return {
-    // فرم states
+    // Form states
     formData: watch(),
     errors,
     isSubmitting,
     isValid,
 
-    // فرم handlers
+    // Form handlers
     handleSubmit: handleSubmit(onFormSubmit),
     handleChange,
     handleFileChange,
 
-    // فرم utilities
+    // Form utilities
     register,
     setError,
     clearErrors,
@@ -174,14 +166,14 @@ export const useFormModal = ({
     getFieldValue,
     reset,
 
-    // ✅ توابع جدید برای مدیریت خطاها
+    // New error handling utilities
     getFieldError,
     hasFieldError,
 
     // status
     isEditMode: mode === "edit",
 
-    // ✅ خطاهای سرور (برای نمایش در UI)
+    // Server errors for UI display
     serverErrors: initialServerErrors,
     serverMessage: initialServerMessage,
   };

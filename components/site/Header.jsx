@@ -4,7 +4,6 @@ import { LayoutDashboard, LogOut, MenuIcon } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
 import MobileMenu from "./MobileMenu";
-import { eventEmitter } from "@/utils/eventEmitter";
 import { getAuthCookies } from "@/app/login/_partials/action";
 
 const Header = () => {
@@ -21,6 +20,7 @@ const Header = () => {
     { lable: "تماس با ما", href: "#" },
   ];
 
+  // Checking coockies for handle login
   useEffect(() => {
     const check = async () => {
       const coockies = await getAuthCookies();
@@ -29,6 +29,7 @@ const Header = () => {
     check();
   }, [user, refreshTrigger]);
 
+  // Checking screen size for handle menu
   useEffect(() => {
     const checkScreenSize = () => {
       const screenSize = window.innerWidth;
@@ -41,6 +42,8 @@ const Header = () => {
 
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  // Checking for clicks outside of the modal
   useEffect(() => {
     const handelClickOutside = (event) => {
       if (
@@ -55,7 +58,7 @@ const Header = () => {
     document.addEventListener("mousedown", handelClickOutside);
 
     return () => {
-      window.removeEventListener("ousedow", handelClickOutside);
+      window.removeEventListener("mousedown", handelClickOutside);
     };
   }, [isModuleOpen]);
 
@@ -66,10 +69,11 @@ const Header = () => {
   return (
     <header
       key={refreshTrigger}
-      className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/10 backdrop-blur-lg"
+      className="sticky top-0 z-50 border-b border-gray-700/50 bg-black/10 backdrop-blur-lg font-iransans-edit"
     >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-16 py-4">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-10 py-4">
         <div className="w-full flex items-center justify-between">
+          {/* Mobile menu */}
           <MobileMenu
             menuItems={menuItems}
             isAuthenticated={isAuthenticated}
@@ -78,17 +82,21 @@ const Header = () => {
             isMenuOpen={isMenuOpen}
             closeMenu={closeMenu}
           />
+
+          {/* Logo */}
           <div className="flex items-center gap-5">
             <MenuIcon
               className="w-4 h-4 sm:hidden cursor-pointer"
               onClick={openMenu}
             />
             <Link href="/">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-blue-600 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 via-blue-500 to-blue-600 bg-clip-text text-transparent font-iransans-bold">
                 وبلاگ من
               </h2>
             </Link>
           </div>
+
+          {/* Menu Items */}
           <div className="hidden sm:flex items-center gap-4 text-sm text-gray-400 mt-1">
             {menuItems.map((i) => (
               <a
@@ -100,15 +108,20 @@ const Header = () => {
               </a>
             ))}
           </div>
+
+          {/* Login btn & User btn */}
           {isLogin && user ? (
             <div>
               <div className="relative flex items-center gap-2" ref={moduleRef}>
+                {/* User btn */}
                 <span
                   className="py-1 px-2 font-bold rounded-full bg-gradient-to-r from-purple-600 to-blue-600 cursor-pointer"
                   onClick={toggleModule}
                 >
                   {user.username.charAt(0)}
                 </span>
+
+                {/* User modal */}
                 {isModuleOpen && (
                   <div className="min-w-56 w-full absolute top-12 left-0 bg-gray-800 flex items-center flex-col gap-2 rounded-2xl p-2 font-semibold">
                     <h3 className="w-full text-gray-400 p-2 border-b border-gray-700">
@@ -135,6 +148,7 @@ const Header = () => {
             </div>
           ) : (
             <Link href="/login">
+              {/* Login btn */}
               <button className="px-4 py-2 rounded-3xl text-sm font-medium transition-all bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white cursor-pointer duration-150">
                 ورود
               </button>

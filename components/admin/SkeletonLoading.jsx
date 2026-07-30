@@ -1,8 +1,8 @@
-// components/ui/Skeleton.jsx
 "use client";
 
-// اسکلتون ساده و کوتاه برای کل صفحات داشبورد
+// Simple, concise skeleton for all dashboard pages
 const Skeleton = ({ type = "table" }) => {
+  // table - Simple table skeleton
   if (type === "table") {
     return (
       <div className="bg-gray-800/30 rounded-xl border border-gray-700/50 overflow-hidden">
@@ -37,6 +37,7 @@ const Skeleton = ({ type = "table" }) => {
     );
   }
 
+  // card - Simple cards skeleton
   if (type === "cards") {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -57,6 +58,7 @@ const Skeleton = ({ type = "table" }) => {
     );
   }
 
+  // form - Simple form skeleton
   if (type === "form") {
     return (
       <div className="bg-[#1F1F24] rounded-xl border border-[#3F3F46] p-6">
@@ -77,7 +79,7 @@ const Skeleton = ({ type = "table" }) => {
     );
   }
 
-  // default - اسکلتون ساده خطی
+  // default - Simple linear skeleton
   return (
     <div className="space-y-4">
       <div className="h-10 bg-gray-700/50 rounded w-full animate-pulse" />

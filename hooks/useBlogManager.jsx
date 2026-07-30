@@ -5,11 +5,14 @@ import {
   editBlog,
   removeBlog,
 } from "@/app/admin/blogs/_partials/action";
+import { useCategories } from "@/context/CategoriesContext";
 import { confirmModal } from "@/utils/confirmModal";
 import { blogSchema } from "@/utils/FormValidation";
-import { useState, useTransition, useCallback } from "react";
+import { recentData } from "@/utils/recentHelpers";
+import { useState, useTransition, useCallback, useMemo } from "react";
 import toast from "react-hot-toast";
 
+// Centralized toast message configuration
 const TOAST_MESSAGES = {
   addSuccess: "مقاله با موفقیت اضافه شد",
   editSuccess: "مقاله با موفقیت ویرایش شد",
@@ -17,8 +20,9 @@ const TOAST_MESSAGES = {
   error: "خطا در عملیات",
 };
 
-export function useBlogManager(initialBlogs) {
-  const [blogs, setBlogs] = useState(initialBlogs);
+export function useBlogManager(initialBlogs, categories) {
+  const [blogs, setBlogs] = useState(recentData(initialBlogs));
+  // Manages modal state including open/close, mode, selected blog, loading, and server errors
   const [modalState, setModalState] = useState({
     isOpen: false,
     mode: "add",
@@ -28,6 +32,7 @@ export function useBlogManager(initialBlogs) {
   });
   const [isPending, startTransition] = useTransition();
 
+  // Opens the modal with specified mode and optional blog data for editing
   const openModal = useCallback((mode, blog = null) => {
     setModalState({
       isOpen: true,
@@ -38,6 +43,15 @@ export function useBlogManager(initialBlogs) {
     });
   }, []);
 
+  const handleCategoriesId = useMemo(() => {
+    let categoriesArray = [];
+    for (const element of categories) {
+      categoriesArray.push(element.id);
+    }
+    return categoriesArray;
+  }, [categories]);
+
+  // Closes the modal and resets its state
   const closeModal = useCallback(() => {
     setModalState((prev) => ({
       ...prev,
@@ -49,11 +63,13 @@ export function useBlogManager(initialBlogs) {
   }, []);
 
   const handleAdd = useCallback(() => openModal("add"), [openModal]);
+
   const handleEdit = useCallback(
     (blog) => openModal("edit", blog),
     [openModal],
   );
 
+  // Handles blog deletion with confirmation dialog
   const handleDelete = useCallback(async (id) => {
     const confirmed = await confirmModal(
       "آیا از حذف این مقاله مطمئن هستید؟",
@@ -78,6 +94,7 @@ export function useBlogManager(initialBlogs) {
     });
   }, []);
 
+  // Handles both add and edit form submissions
   const handleSubmit = useCallback(
     async (formData) => {
       const { mode, selectedBlog } = modalState;
@@ -92,6 +109,7 @@ export function useBlogManager(initialBlogs) {
         }
       });
 
+      // Append the blog ID for edit operations
       if (!isAddMode && selectedBlog?.id) {
         form.append("id", selectedBlog.id);
       }
@@ -100,9 +118,10 @@ export function useBlogManager(initialBlogs) {
         const response = isAddMode ? await addBlog(form) : await editBlog(form);
         if (response.success) {
           const { data } = response;
+          // Update the blogs list based on operation type
           setBlogs((prev) =>
             isAddMode
-              ? [...prev, data]
+              ? [data, ...prev]
               : prev.map((blog) =>
                   blog.id === selectedBlog?.id ? data : blog,
                 ),
@@ -133,6 +152,6 @@ export function useBlogManager(initialBlogs) {
     handleDelete,
     handleSubmit,
     closeModal,
-    blogSchema,
+    blogSchema: blogSchema(handleCategoriesId),
   };
 }

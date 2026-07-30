@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // دریافت کوکی‌ها
+  // Get cookies from the request
   const token = request.cookies.get("token")?.value;
   const userCookie = request.cookies.get("user")?.value;
 
@@ -17,7 +17,7 @@ export async function middleware(request) {
   const isAuthenticated = !!token;
   const isAdmin = user?.role === "admin";
 
-  // 1. اگر به لاگین رفته و لاگین هست => به صفحه مناسب هدایت کن
+  // 1. If user is on login page and already authenticated, redirect to appropriate page
   if (pathname === "/login") {
     if (isAuthenticated) {
       const redirectUrl = isAdmin ? "/admin/dashboard" : "/";
@@ -26,7 +26,7 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
-  // 2. محافظت از مسیرهای ادمین
+  // 2. Protect admin routes - require authentication and admin role
   if (pathname.startsWith("/admin")) {
     if (!isAuthenticated) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -37,10 +37,11 @@ export async function middleware(request) {
     return NextResponse.next();
   }
 
-  // 3. مسیرهای عمومی - نیازی به چک نیست
+  // 3. Public routes - no checks needed
   return NextResponse.next();
 }
 
+// Configure which routes the middleware should run on
 export const config = {
   matcher: ["/admin/:path*", "/login"],
 };

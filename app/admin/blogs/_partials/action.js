@@ -1,24 +1,27 @@
 "use server";
 
 import { deleteBlog, createBlog, updateBlog } from "@/services/BlogService";
+import { getAllCategories } from "@/services/CategorieService";
+import { formatZodErrors } from "@/utils/formatZodErrors";
 import { blogSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
-const formatZodErrors = (error) => {
-  const errors = {};
-  error.errors.forEach((err) => {
-    if (err.path) {
-      errors[err.path[0]] = err.message;
-    }
-  });
-  return errors;
-};
-
+// Server action for adding a new blog
 export async function addBlog(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
-  const blogValidate = blogSchema.safeParse(rawData);
+  const handleCategoriesId = async () => {
+    let categoriesArray = [];
+    const { data: res } = await getAllCategories();
+    for (const element of res) {
+      categoriesArray.push(element.id);
+    }
+    return categoriesArray;
+  };
+  const categoryItems = await handleCategoriesId();
+
+  // Validate blog data against schema
+  const blogValidate = blogSchema(categoryItems).safeParse(rawData);
 
   if (!blogValidate.success) {
     const errors = formatZodErrors(blogValidate.error);
@@ -32,23 +35,35 @@ export async function addBlog(formData) {
   const validatedData = blogValidate.data;
 
   const data = await createBlog(validatedData);
-  if (!data.success) {
+  if (!data?.success) {
     return {
       success: false,
       error: data.message,
     };
   }
+
+  // Revalidate the blogs page to reflect changes
   revalidatePath(`/admin/blogs`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }
+
+// Server action for editing an existing blog
 export async function editBlog(formData) {
   const rawData = Object.fromEntries(formData.entries());
+  
+  const handleCategoriesId = async () => {
+    let categoriesArray = [];
+    const { data: res } = await getAllCategories();
+    for (const element of res) {
+      categoriesArray.push(element.id);
+    }
+    return categoriesArray;
+  };
+  const categoryItems = await handleCategoriesId();
 
-  const blogValidate = blogSchema.safeParse(rawData);
+  // Validate blog data against schema
+  const blogValidate = blogSchema(categoryItems).safeParse(rawData);
 
   if (!blogValidate.success) {
     const errors = formatZodErrors(blogValidate.error);
@@ -64,6 +79,7 @@ export async function editBlog(formData) {
     id: rawData.id,
     data: validatedData,
   };
+
   const data = await updateBlog(params);
   if (!data.success) {
     return {
@@ -71,13 +87,14 @@ export async function editBlog(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the blogs page to reflect changes
   revalidatePath(`/admin/blogs`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }
+
+// Server action for deleting a blog
 export async function removeBlog(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
@@ -88,10 +105,9 @@ export async function removeBlog(formData) {
       error: data.message,
     };
   }
+
+  // Revalidate the blogs page to reflect changes
   revalidatePath(`/admin/blogs`);
 
-  return {
-    success: true,
-    data,
-  };
+  return data;
 }

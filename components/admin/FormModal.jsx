@@ -1,4 +1,3 @@
-// components/ui/FormModal/index.jsx
 "use client";
 
 import { useFormModal } from "@/hooks/useFormModal";
@@ -25,6 +24,7 @@ const FormModal = ({
     isValid,
     handleSubmit,
     handleChange,
+    handleFileChange,
     isEditMode,
     register,
     setValue,
@@ -70,10 +70,10 @@ const FormModal = ({
           </button>
         </div>
 
-        {/* Body - فرم */}
+        {/* Body */}
         <form onSubmit={handleSubmit}>
           <div className="p-4 space-y-4">
-            {/* ✅ نمایش خطای کلی سرور */}
+            {/* Display general server error */}
             {serverErrors?._form && (
               <div className="p-3 bg-red-500/10 border border-red-500 rounded-lg">
                 <p className="text-red-400 text-sm">⚠️ {serverErrors._form}</p>
@@ -134,7 +134,9 @@ const FormModal = ({
                           <input
                             type="file"
                             name={field.name}
-                            onChange={handleChange}
+                            onChange={(e) =>
+                              handleFileChange(field.name, e.target.files?.[0])
+                            }
                             accept={field.accept}
                             className="w-full p-2 bg-[#2A2A30] border border-[#3F3F46] rounded-lg focus:outline-none focus:border-purple-500 text-white file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:bg-purple-600 file:text-white hover:file:bg-purple-700"
                           />
@@ -150,7 +152,7 @@ const FormModal = ({
                         />
                       )}
 
-                      {/* ✅ نمایش خطای فیلد (زیر هر فیلد) */}
+                      {/* Display field error (below each field)*/}
                       {fieldError && (
                         <div className="mt-1 flex items-start gap-1.5">
                           <span className="text-red-400 text-xs">⚠️</span>
@@ -160,7 +162,7 @@ const FormModal = ({
                         </div>
                       )}
 
-                      {/* نمایش hint */}
+                      {/* Show hint */}
                       {field.hint && !fieldError && (
                         <p className="text-xs text-gray-500 mt-1">
                           {field.hint}

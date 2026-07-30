@@ -1,13 +1,9 @@
 "use client";
-import React, { useEffect, useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight, Search, Filter, Plus } from "lucide-react";
-import { formatToSolarDate } from "@/utils/FormatDate";
-import { useCategories } from "@/context/CategoriesContext";
+import React from "react";
+import { ChevronLeft, ChevronRight, Search, Plus } from "lucide-react";
 import Link from "next/link";
-import { useDebounce } from "@/hooks/useDebound";
 import SpinnerLoading from "../shared/SpinnerLoading";
-import { useBlog } from "@/context/BlogContext";
-import { handelSearch } from "@/utils/searchLib";
+import { useTableManager } from "@/hooks/useTableManager";
 
 const ReusableTable = ({
   columns,
@@ -17,7 +13,7 @@ const ReusableTable = ({
   showFilter = true,
   selectBoxData,
   showPagination = true,
-  itemsPerPage = 10,
+  itemsPerPage = 5,
   onRowClick,
   onAdd,
   onEdit,
@@ -28,72 +24,26 @@ const ReusableTable = ({
   emptyMessage = "هیچ داده‌ای یافت نشد",
   className = "",
 }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(1);
-  const debouncedSearch = useDebounce(searchTerm, 1000);
-  const debouncedFilter = useDebounce(activeFilter, 800);
-  const [isLoading, setIsLoading] = useState(false);
-  const { getCategoryName } = useCategories();
-  const { getBlogName } = useBlog();
-
-  const handleFilter = useMemo(() => {
-    if (!debouncedFilter) return data;
-    return handelSearch(data, searchTerm, activeFilter);
-  }, [data, debouncedFilter, debouncedSearch]);
-
-  useEffect(() => {
-    setIsLoading(true);
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 900);
-    return () => clearTimeout(timer);
-  }, [debouncedFilter, debouncedSearch]);
-
-  // پیجینیشن
-  const totalPages = Math.ceil(handleFilter.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedData = handleFilter.slice(
+  const {
+    searchTerm,
+    setSearchTerm,
+    setActiveFilter,
+    currentPage,
+    setCurrentPage,
+    isLoading,
+    filteredData,
+    totalPages,
     startIndex,
-    startIndex + itemsPerPage,
-  );
-
-  // تغییر صفحه
-  const goToPage = (page) => {
-    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
-  };
-
-  // رندر سلول براساس نوع داده
-  const renderCell = (item, column) => {
-    const value = item[column.key];
-
-    if (column.render) {
-      return column.render(value, item);
-    }
-
-    if (column.key === "image") {
-      return <img src={value} className="w-10 h-10 rounded-xl" alt="" />;
-    }
-
-    if (column.key === "createdAt") {
-      return formatToSolarDate(value);
-    }
-
-    if (column.key === "categoryId") {
-      return getCategoryName(value);
-    }
-    if (column.key === "articleId") {
-      return getBlogName(value);
-    }
-
-    return value;
-  };
+    paginatedData,
+    goToPage,
+    renderCell,
+  } = useTableManager(data, itemsPerPage);
 
   return (
     <div
       className={`bg-gray-800/30 rounded-xl border border-gray-700/50 overflow-hidden ${className}`}
     >
-      {/* Header with Title and Search */}
+      {/* Header with Title, Search, selectbox & add btn */}
       {(title || showSearch) && (
         <div className="p-4 border-b border-gray-700/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           {title && (
@@ -167,6 +117,7 @@ const ReusableTable = ({
           </thead>
 
           <tbody>
+            {/* Spinner loading */}
             {isLoading ? (
               <tr>
                 <td
@@ -196,6 +147,7 @@ const ReusableTable = ({
                           {renderCell(item, column)}
                         </td>
                       ))}
+                      {/* Operations cell */}
                       {(onEdit || onDelete || onView || customActions) && (
                         <td className="py-3 px-4">
                           <div className="flex gap-1">
@@ -288,6 +240,7 @@ const ReusableTable = ({
                     </tr>
                   ))
                 ) : (
+                  // Empty message if data is null
                   <tr>
                     <td
                       colSpan={
@@ -311,8 +264,8 @@ const ReusableTable = ({
         <div className="p-4 border-t border-gray-700/50 flex justify-between items-center">
           <div className="text-sm text-gray-400">
             نمایش {startIndex + 1} تا{" "}
-            {Math.min(startIndex + itemsPerPage, handleFilter.length)} از{" "}
-            {handleFilter.length} نتیجه
+            {Math.min(startIndex + itemsPerPage, filteredData.length)} از{" "}
+            {filteredData.length} نتیجه
           </div>
           <div className="flex gap-2">
             <button

@@ -5,6 +5,7 @@ import FormModal from "@/components/admin/FormModal";
 import { useCommentManager } from "@/hooks/useCommentManager";
 
 const CommentClient = ({ comments: initialComments }) => {
+  // Initialize comment management hook with initial data
   const {
     comments,
     modalState,
@@ -15,6 +16,8 @@ const CommentClient = ({ comments: initialComments }) => {
     closeModal,
     commentSchema,
   } = useCommentManager(initialComments);
+
+  // Table column configuration
   const columns = [
     { key: "author", label: "نویسنده" },
     { key: "content", label: "متن نظر" },
@@ -22,6 +25,7 @@ const CommentClient = ({ comments: initialComments }) => {
     { key: "createdAt", label: "تاریخ" },
   ];
 
+  // Form fields for editing comments (only content is editable)
   const commentFields = [
     {
       name: "content",
@@ -34,6 +38,7 @@ const CommentClient = ({ comments: initialComments }) => {
   ];
   return (
     <>
+      {/* Comments management table with CRUD operations */}
       <ReusableTable
         columns={columns}
         data={comments}
@@ -44,6 +49,8 @@ const CommentClient = ({ comments: initialComments }) => {
         onDelete={handleDelete}
         isLoading={isPending}
       />
+
+      {/* Modal for editing comments */}
       <FormModal
         isOpen={modalState.isOpen}
         onClose={closeModal}

@@ -5,6 +5,7 @@ import FormModal from "@/components/admin/FormModal";
 import { useUserManager } from "@/hooks/useUserManager";
 
 const UserClient = ({ users: initialUsers }) => {
+  // Initialize user management hook with initial data
   const {
     users,
     modalState,
@@ -17,6 +18,8 @@ const UserClient = ({ users: initialUsers }) => {
     userSchema,
     profileUpdateSchema,
   } = useUserManager(initialUsers);
+
+  // Table column configuration
   const columns = [
     { key: "username", label: "نام کاربری" },
     { key: "email", label: "ایمیل" },
@@ -24,11 +27,13 @@ const UserClient = ({ users: initialUsers }) => {
     { key: "createdAt", label: "تاریخ ایجاد" },
   ];
 
+  // User role options for select dropdown
   const userRols = [
     { id: "admin", value: "admin", title: "مدیر", label: "مدیر" },
     { id: "user", value: "user", title: "کاربر", label: "کاربر" },
   ];
 
+  // Form fields for adding a new user
   const addUserFields = [
     {
       name: "username",
@@ -61,6 +66,7 @@ const UserClient = ({ users: initialUsers }) => {
     },
   ];
 
+  // Form fields for editing a user (role only)
   const editUserFields = [
     {
       name: "role",
@@ -73,6 +79,7 @@ const UserClient = ({ users: initialUsers }) => {
 
   return (
     <>
+      {/* User management table with CRUD operations */}
       <ReusableTable
         columns={columns}
         data={users}
@@ -84,6 +91,8 @@ const UserClient = ({ users: initialUsers }) => {
         onDelete={handleDelete}
         isLoading={isPending}
       />
+
+      {/* Modal for adding or editing users */}
       <FormModal
         isOpen={modalState.isOpen}
         onClose={closeModal}

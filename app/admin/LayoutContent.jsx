@@ -14,7 +14,6 @@ import React, { useEffect, useState } from "react";
 
 const LayoutContent = ({ children }) => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard");
   const { user, logout } = useAuth();
   const pathName = usePathname();
 
@@ -42,25 +41,15 @@ const LayoutContent = ({ children }) => {
     { id: "users", href: "users", label: "کاربران", icon: Users },
   ];
 
-  useEffect(() => {
-    switch (pathName) {
-      case "/admin/blogs":
-        setActiveTab("blogs");
-        break;
-      case "/admin/comments":
-        setActiveTab("comments");
-        break;
-      case "/admin/categories":
-        setActiveTab("categories");
-        break;
-      case "/admin/users":
-        setActiveTab("users");
-        break;
-      default:
-        setActiveTab("dashboard");
-        break;
-    }
-  }, [pathName]);
+  // Update active tab based on current pathname
+  const activeTab = useMemo(() => {
+    if (!pathName) return;
+
+    const currentPath = pathName.split("/").pop() || "dashboard";
+
+    const foundItem = menuItems.find((item) => item.href === currentPath);
+    return foundItem ? foundItem.id : "dashboard";
+  }, [pathName, menuItems]);
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black">
@@ -71,7 +60,7 @@ const LayoutContent = ({ children }) => {
           setSidebarCollapsed={setSidebarCollapsed}
           menuItems={menuItems}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          // setActiveTab={setActiveTab}
           logout={logout}
         />
 

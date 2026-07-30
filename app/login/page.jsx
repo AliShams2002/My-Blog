@@ -10,7 +10,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center p-4">
-      {/* Background Decorative Elements */}
+      {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-600/20 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-600/20 rounded-full blur-3xl"></div>
@@ -19,7 +19,7 @@ const Login = () => {
       {/* Main Container - Smaller and Centered */}
       <div className="relative w-full max-w-4xl bg-gray-800/30 backdrop-blur-xl rounded-3xl border border-gray-700/50 overflow-hidden shadow-2xl">
         <div className="flex flex-col md:flex-row">
-          {/* Left Side - Logo & Branding */}
+          {/* Left side - Login form */}
           <div className="md:w-1/2 p-8 md:p-10">
             <div className="w-full">
               <div className="text-center mb-8">
@@ -28,8 +28,9 @@ const Login = () => {
                   برای ادامه سفر خود وارد شوید
                 </p>
               </div>
-
+              {/* Login form */}
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* Username lable */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     نام کاربری
@@ -43,6 +44,7 @@ const Login = () => {
                       placeholder="نام کاربری خود را وارد نمایید"
                     />
                   </div>
+                  {/* Username Error */}
                   {errors.username && (
                     <p className="text-red-500 text-sm">
                       {errors.username?.message}
@@ -50,6 +52,7 @@ const Login = () => {
                   )}
                 </div>
                 <div>
+                  {/* Password lable */}
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     رمز عبور
                   </label>
@@ -63,6 +66,7 @@ const Login = () => {
                       placeholder="••••••••"
                     />
                   </div>
+                  {/* Password error */}
                   {errors.password && (
                     <p className="text-red-500 text-sm">
                       {errors.password.message}
@@ -70,7 +74,7 @@ const Login = () => {
                   )}
                 </div>
 
-                {/* Submit Button */}
+                {/* Submit button */}
                 <button
                   type="submit"
                   className="w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg shadow-purple-500/30 flex items-center justify-center gap-2 group cursor-pointer"
@@ -89,16 +93,16 @@ const Login = () => {
             </div>
           </div>
 
-          {/* Right Side - Login Form */}
+          {/* Right Side - Logo & Branding */}
           <div className="hidden md:w-1/2 p-8 md:p-10 bg-gradient-to-br from-purple-900/30 to-pink-900/30 md:flex flex-col items-center justify-center text-center">
-            {/* Animated Logo Container */}
+            {/* Animated logo container */}
             <div className="relative mb-6">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-3xl blur-xl opacity-50 animate-pulse"></div>
               <div className="relative w-32 h-32 md:w-40 md:h-40 rounded-3xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-2xl transform rotate-3 hover:rotate-6 transition-transform duration-300">
                 <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-white" />
               </div>
             </div>
-
+                    
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent mb-3">
               وبلاگ من
             </h1>

@@ -1,5 +1,6 @@
 import { clientFetcher, serverFetcher } from "./Fetcher";
 
+// User login - uses client fetcher
 export const loginUser = async (params) => {
   try {
     const data = await clientFetcher(`/api/auth/login`, {
@@ -12,10 +13,13 @@ export const loginUser = async (params) => {
   }
 };
 
+// Fetch all users - uses server fetcher with authentication
 export const getAllUsers = async () => {
   const data = await serverFetcher("/api/auth/users");
   return data;
 };
+
+// Create a new user (register)
 export const createUser = async (params) => {
   try {
     const data = await serverFetcher("/api/auth/register", {
@@ -27,6 +31,8 @@ export const createUser = async (params) => {
     return error;
   }
 };
+
+// Update a user's role
 export const updateUserRole = async (params) => {
   try {
     const data = await serverFetcher(`/api/auth/users/${params.id}/role`, {
@@ -38,6 +44,8 @@ export const updateUserRole = async (params) => {
     return error;
   }
 };
+
+// Delete a user by ID
 export const deleteUser = async (params) => {
   const { id } = params;
   try {

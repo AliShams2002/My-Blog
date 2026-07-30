@@ -6,9 +6,11 @@ import {
 } from "@/app/admin/comments/_partials/action";
 import { confirmModal } from "@/utils/confirmModal";
 import { commentSchema } from "@/utils/FormValidation";
+import { recentData } from "@/utils/recentHelpers";
 import { useState, useTransition, useCallback } from "react";
 import toast from "react-hot-toast";
 
+// Centralized toast message configuration
 const TOAST_MESSAGES = {
   editSuccess: "نظر با موفقیت ویرایش شد",
   deleteSuccess: "نظر با موفقیت حذف شد",
@@ -16,17 +18,18 @@ const TOAST_MESSAGES = {
 };
 
 export function useCommentManager(initialComments) {
-  const [comments, setComments] = useState(initialComments);
+  const [comments, setComments] = useState(recentData(initialComments));
+  // Manages modal state - only edit mode is available for comments
   const [modalState, setModalState] = useState({
     isOpen: false,
-    mode: "edit", // فقط ویرایش داریم
+    mode: "edit",
     selectedComment: null,
     isLoading: false,
     serverErrors: {},
   });
   const [isPending, startTransition] = useTransition();
 
-  // باز کردن مودال ویرایش
+  // Opens the edit modal with the selected comment data
   const openEditModal = useCallback((comment) => {
     setModalState({
       isOpen: true,
@@ -37,6 +40,7 @@ export function useCommentManager(initialComments) {
     });
   }, []);
 
+  // Closes the modal and resets its state
   const closeModal = useCallback(() => {
     setModalState((prev) => ({
       ...prev,
@@ -53,6 +57,7 @@ export function useCommentManager(initialComments) {
     [openEditModal],
   );
 
+  // Handles comment deletion with confirmation dialog
   const handleDelete = useCallback(async (id) => {
     const confirmed = await confirmModal(
       "آیا از حذف این نظر مطمئن هستید؟",
@@ -77,10 +82,12 @@ export function useCommentManager(initialComments) {
     });
   }, []);
 
+  // Handles comment edit form submission
   const handleSubmit = useCallback(
     async (formData) => {
       const { selectedComment } = modalState;
 
+      // Validate that a comment ID exists
       if (!selectedComment?.id) {
         toast.error("شناسه نظر یافت نشد");
         return;
@@ -95,12 +102,14 @@ export function useCommentManager(initialComments) {
         }
       });
 
+      // Append the comment ID for the edit operation
       form.append("id", selectedComment.id);
 
       startTransition(async () => {
         const response = await editComment(form);
         if (response.success) {
           const { data } = response;
+          // Update the specific comment in the list
           setComments((prev) =>
             prev.map((comment) =>
               comment.id === selectedComment.id ? data : comment,

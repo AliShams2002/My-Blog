@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroui/tooltip": "^2.2.29",
     "@hookform/resolvers": "^3.3.4",
     "axios": "^1.16.0",
     "js-cookie": "^3.0.5",

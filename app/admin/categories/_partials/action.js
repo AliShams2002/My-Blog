@@ -9,9 +9,11 @@ import { formatZodErrors } from "@/utils/formatZodErrors";
 import { categorieSchema } from "@/utils/FormValidation";
 import { revalidatePath } from "next/cache";
 
+// Server action for adding a new category
 export async function addCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
+  // Validate category data against schema
   const userValidate = categorieSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -33,13 +35,17 @@ export async function addCategory(formData) {
     };
   }
 
+  // Revalidate the categories page to reflect changes
   revalidatePath(`/admin/categories`);
 
   return data;
 }
+
+// Server action for editing an existing category
 export async function editCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
+  // Validate category data against schema
   const userValidate = categorieSchema.safeParse(rawData);
 
   if (!userValidate.success) {
@@ -64,10 +70,13 @@ export async function editCategory(formData) {
     };
   }
 
+  // Revalidate the categories page to reflect changes
   revalidatePath(`/admin/categories`);
 
   return data;
 }
+
+// Server action for deleting a category
 export async function removeCategory(formData) {
   const rawData = Object.fromEntries(formData.entries());
 
@@ -79,6 +88,7 @@ export async function removeCategory(formData) {
     };
   }
 
+  // Revalidate the categories page to reflect changes
   revalidatePath(`/admin/categories`);
 
   return data;

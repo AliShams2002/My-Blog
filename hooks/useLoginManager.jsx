@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "@/utils/AuthValidation";
 import { useRouter } from "next/navigation";
 
+// Centralized toast message configuration
 const TOAST_MESSAGES = {
   loginSuccess: "عملیات ورود با موفقیت انجام شد",
   error: "خطا در عملیات",
@@ -27,6 +28,7 @@ export function useLoginManager() {
   const [isLoadingState, setIsLoadingState] = useState(false);
   const [isPending, startTransition] = useTransition();
 
+  // Converts server-side errors to react-hook-form field errors
   const handleErrors = (errors = null) => {
     if (errors && Object.keys(errors).length > 0) {
       clearErrors();
@@ -42,6 +44,7 @@ export function useLoginManager() {
     }
   };
 
+  // Handles login form submission
   const handleSubmitForm = useCallback(async (formData) => {
     setIsLoadingState(true);
 
@@ -55,6 +58,7 @@ export function useLoginManager() {
       const response = await loginAction(form);
       if (response.success) {
         const { data } = response;
+        // Update auth context with user data and token
         login({ userData: data.user, accessToken: data.token });
         toast.success(TOAST_MESSAGES.loginSuccess);
         router.push("admin/dashboard");

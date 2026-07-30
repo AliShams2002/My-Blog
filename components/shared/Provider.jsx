@@ -1,6 +1,7 @@
 import React from "react";
 import { Toaster } from "react-hot-toast";
 
+// Provider component for using toasts throughout the project
 const Provider = ({ children }) => {
   return (
     <div>

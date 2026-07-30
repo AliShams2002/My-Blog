@@ -1,9 +1,12 @@
 import { clientFetcher, serverFetcher } from "./Fetcher";
 
+// Fetch all categories
 export const getAllCategories = async () => {
   const data = await clientFetcher("/api/categories");
   return data;
 };
+
+// Create a new category
 export const createCategory = async (params) => {
   try {
     const data = await serverFetcher("/api/categories", {
@@ -17,6 +20,7 @@ export const createCategory = async (params) => {
   }
 };
 
+// Update an existing category
 export const updateCategory = async (params) => {
   try {
     const data = await serverFetcher(`/api/categories/${params.id}`, {
@@ -29,6 +33,8 @@ export const updateCategory = async (params) => {
     return serverMassage;
   }
 };
+
+// Delete a category by ID
 export const deleteCategory = async (params) => {
   const { id } = params;
   try {
@@ -40,6 +46,8 @@ export const deleteCategory = async (params) => {
     return error;
   }
 };
+
+// Fetch all blogs related to a specific category
 export const getBlogRelatedOfCategory = async (id) => {
   const data = await clientFetcher(`/api/categories/${id}/articles`);
   return data;

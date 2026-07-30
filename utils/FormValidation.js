@@ -1,5 +1,7 @@
+import { getAllCategories } from "@/services/CategorieService";
 import { z } from "zod";
 
+// Password strength validation helper
 const isStrongPassword = (password) => {
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
@@ -16,58 +18,33 @@ const isStrongPassword = (password) => {
   );
 };
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
-const getBase64Size = (base64String) => {
-  if (!base64String || typeof base64String !== "string") return 0;
-  // حذف metadata (data:image/png;base64,)
-  const base64WithoutPrefix = base64String.split(",")[1] || base64String;
-  // محاسبه حجم تقریبی (هر 4 کاراکتر base64 ≈ 3 بایت)
-  const sizeInBytes = Math.ceil((base64WithoutPrefix.length * 3) / 4);
-  return sizeInBytes;
+// Blog validation schema
+export const blogSchema = (categoryItems = []) => {
+  return z.object({
+    title: z
+      .string()
+      .min(5, "عنوان حداقل 5 کاراکتر")
+      .max(100, "حداکثر 100 کاراکتر"),
+    content: z.string().min(20, "محتوا حداقل 20 کاراکتر"),
+    author: z.string().min(3, "نویسنده حداقل 3 کاراکتر"),
+    categoryId: z.string().refine((value) => categoryItems.includes(value), {
+      message: "دسته‌بندی معتبر نیست",
+    }),
+    image: z.instanceof(File, {
+      message: "بارگذاری تصویر الزامی است",
+    }),
+  });
 };
 
-export const blogSchema = z.object({
-  title: z
-    .string()
-    .min(5, "عنوان حداقل 5 کاراکتر")
-    .max(100, "حداکثر 100 کاراکتر"),
-  content: z.string().min(20, "محتوا حداقل 20 کاراکتر"),
-  author: z.string().min(3, "نویسنده حداقل 3 کاراکتر"),
-  categoryId: z.enum(["cat1", "cat2", "cat3", "lwrclW3D_w", "9QgYiPAoJT"], {
-    errorMap: () => ({ message: "دسته‌بندی معتبر نیست" }),
-  }),
-  image: z
-    .string()
-    .refine((val) => {
-      // اگر خالی بود (اختیاری)
-      if (!val) return true;
-      // بررسی فرمت base64
-      return val.startsWith("data:image/");
-    }, "فرمت تصویر معتبر نیست")
-    .refine((val) => {
-      if (!val) return true;
-      const size = getBase64Size(val);
-      return size <= 70 * 1024;
-    }, "حجم تصویر حداکثر 70 کیلوبایت باشد")
-    .refine((val) => val && val.trim().length > 0, {
-      message: "بارگذاری تصویر الزامی است",
-    })
-    .optional()
-    .nullable(),
-});
+// Comment validation schema
 export const commentSchema = z.object({
   content: z
     .string()
     .min(5, "محتوا حداقل 5 کاراکتر")
     .max(150, "محتوا حداقل 150 کاراکتر"),
 });
+
+// Category validation schema
 export const categorieSchema = z.object({
   title: z
     .string()
@@ -79,6 +56,7 @@ export const categorieSchema = z.object({
     .max(50, "توضیحات حداقل 50 کاراکتر"),
 });
 
+// User validation schema
 export const userSchema = z.object({
   username: z
     .string({
@@ -126,6 +104,7 @@ export const userSchema = z.object({
     .default("user"),
 });
 
+// Profile update validation schema (role only)
 export const profileUpdateSchema = z.object({
   role: z
     .enum(["user", "admin"], {

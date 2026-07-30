@@ -1,15 +1,18 @@
 import { clientFetcher, serverFetcher } from "./Fetcher";
 
+// Fetch all comments
 export const getAllComments = async () => {
   const data = await clientFetcher("/api/comments");
   return data;
 };
 
+// Fetch comments by blog/article ID
 export const getCommentsByBlogId = async (blogId) => {
   const data = await clientFetcher(`/api/articles/${blogId}/comments`);
   return data;
 };
 
+// Create a new comment
 export const createComment = async (params) => {
   try {
     const data = await serverFetcher("/api/comments", {
@@ -23,6 +26,7 @@ export const createComment = async (params) => {
   }
 };
 
+// Update an existing comment
 export const updateComment = async (params) => {
   try {
     const data = await serverFetcher(`/api/comments/${params.id}`, {
@@ -35,6 +39,7 @@ export const updateComment = async (params) => {
   }
 };
 
+// Delete a comment by ID
 export const deleteComment = async (params) => {
   const { id } = params;
   try {

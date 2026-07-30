@@ -24,7 +24,7 @@ const Header = ({
           <p className="text-sm text-gray-400 mt-1">به پنل مدیریت خوش آمدید</p>
         </div>
 
-        {/* User Profile - با Hover Card */}
+        {/* User profile - with hover card */}
         <div className="relative">
           {user && (
             <div
@@ -46,14 +46,14 @@ const Header = ({
             </div>
           )}
 
-          {/* User Info Card - Hover Card */}
+          {/* User info card - hover card */}
           {showUserCard && (
             <div
               className="absolute left-0 top-full mt-2 w-72 bg-[#1F1F24] rounded-xl border border-[#3F3F46] shadow-2xl z-50 overflow-hidden"
               onMouseEnter={() => setShowUserCard(true)}
               onMouseLeave={() => setShowUserCard(false)}
             >
-              {/* Header Card */}
+              {/* Header card */}
               <div className="p-4 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border-b border-[#3F3F46]">
                 <div className="flex items-center gap-3">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xl font-bold shadow-lg">
@@ -76,7 +76,7 @@ const Header = ({
                 </div>
               </div>
 
-              {/* User Details */}
+              {/* User details */}
               <div className="p-4 space-y-3">
                 {/* Email */}
                 <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#2A2A30] transition-colors">
@@ -101,7 +101,7 @@ const Header = ({
                   </div>
                 </div>
 
-                {/* Join Date */}
+                {/* Join date */}
                 <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#2A2A30] transition-colors">
                   <div className="w-8 h-8 rounded-lg bg-green-500/20 flex items-center justify-center">
                     <svg

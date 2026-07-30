@@ -6,10 +6,14 @@ import React from "react";
 import CategoriesClient from "./_partials/CategorieClient";
 import Skeleton from "@/components/admin/SkeletonLoading";
 
+// Force dynamic rendering - disable static generation for this page
 export const dynamic = "force-dynamic";
+
 const Page = async () => {
+  // Fetch all categories
   const { data: categories } = await getAllCategories();
 
+  // Fetch blog count for each category in parallel
   const categoriesWithCount = await Promise.all(
     categories.map(async (category) => {
       try {
@@ -19,12 +23,12 @@ const Page = async () => {
           articlesCount: articles?.length || 0,
         };
       } catch (error) {
-        console.error(`Error: ${error}`);
         return { ...category, articlesCount: 0 };
       }
     }),
   );
 
+  // Show skeleton loading if categories data is not available
   if (!categories) return <Skeleton type="card" />;
 
   return <CategoriesClient categories={categoriesWithCount} />;

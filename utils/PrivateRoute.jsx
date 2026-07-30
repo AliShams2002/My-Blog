@@ -2,20 +2,22 @@
 
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
 import { useAuth } from "@/context/AuthContext";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
-  const { user, isAuthenticated, isLoading, token } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
 
+  // Redirect to login if user is not authenticated
   useEffect(() => {
     if (isLoading) return;
     if (!isAuthenticated) {
       router.replace("/login");
     }
-  }, [isAuthenticated, isLoading]);
+  }, [isAuthenticated, isLoading, router]);
 
+  // Show loading spinner while checking authentication status
   if (isLoading || !isAuthenticated) {
     return (
       <div className="w-screen h-screen flex items-center justify-center">

@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useDebounce } from "./useDebound";
 import { categorieSchema } from "@/utils/FormValidation";
 
+// Centralized toast message configuration
 const TOAST_MESSAGES = {
   addSuccess: "دسته بندی با موفقیت اضافه شد",
   editSuccess: "دسته بندی با موفقیت ویرایش شد",
@@ -30,6 +31,7 @@ export function useCategoryManager(initialCategories) {
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearch = useDebounce(searchTerm, 800);
   const [isLoading, setIsLoading] = useState(false);
+  // Manages modal state including open/close, mode, selected category, loading, and server errors
   const [modalState, setModalState] = useState({
     isOpen: false,
     mode: "add",
@@ -39,6 +41,7 @@ export function useCategoryManager(initialCategories) {
   });
   const [isPending, startTransition] = useTransition();
 
+  // Opens the modal with specified mode and optional category data for editing
   const openModal = useCallback((mode, category = null) => {
     setModalState({
       isOpen: true,
@@ -49,6 +52,7 @@ export function useCategoryManager(initialCategories) {
     });
   }, []);
 
+  // Closes the modal and resets its state
   const closeModal = useCallback(() => {
     setModalState((prev) => ({
       ...prev,
@@ -64,6 +68,7 @@ export function useCategoryManager(initialCategories) {
     [openModal],
   );
 
+  // Simulates loading state during search operations
   useEffect(() => {
     if (searchTerm) {
       setIsLoading(true);
@@ -76,12 +81,14 @@ export function useCategoryManager(initialCategories) {
     }
   }, [debouncedSearch]);
 
+  // Filters categories based on search term
   const filteredCategories = useMemo(() => {
     if (!debouncedSearch) return categories;
     const dataFiltered = handelSearch(categories, searchTerm);
     return dataFiltered;
   }, [categories, searchTerm, debouncedSearch]);
 
+  // Handles category deletion with confirmation dialog
   const handleDelete = useCallback(async (id) => {
     const confirmed = await confirmModal(
       "آیا از حذف این دسته بندی مطمئن هستید؟",
@@ -106,6 +113,7 @@ export function useCategoryManager(initialCategories) {
     });
   }, []);
 
+  // Handles both add and edit form submissions
   const handleSubmit = useCallback(
     async (formData) => {
       const { mode, selectedCategory } = modalState;
@@ -120,6 +128,7 @@ export function useCategoryManager(initialCategories) {
         }
       });
 
+      // Append the category ID for edit operations
       if (!isAddMode && selectedCategory?.id) {
         form.append("id", selectedCategory.id);
       }
@@ -131,6 +140,7 @@ export function useCategoryManager(initialCategories) {
 
         if (response.success) {
           const { data } = response;
+          // Update the categories list based on operation type
           setCategories((prev) =>
             isAddMode
               ? [...prev, data]
