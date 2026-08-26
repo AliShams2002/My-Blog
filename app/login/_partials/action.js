@@ -27,7 +27,7 @@ export async function loginAction(formData) {
   if (!data.success) {
     return {
       success: false,
-      error: data.message,
+      data,
     };
   }
   const token = data.data.token;

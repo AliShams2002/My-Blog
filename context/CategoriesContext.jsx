@@ -35,6 +35,11 @@ export default function CategoriesProvider({ categoriesData, children }) {
   );
 }
 
+// Custom hook to use categorie context
 export const useCategories = () => {
-  return useContext(CategoriesContext);
+  const context = useContext(CategoriesContext);
+  if (!context) {
+    throw new Error("useCategories must be used within an AppProvider");
+  }
+  return context;
 };

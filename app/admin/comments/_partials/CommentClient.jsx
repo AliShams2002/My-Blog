@@ -59,7 +59,7 @@ const CommentClient = ({ comments: initialComments }) => {
         title={modalState.mode === "add" ? "افزودن مقاله جدید" : "ویرایش مقاله"}
         initialData={modalState.selectedComment || {}}
         fields={commentFields}
-        isLoading={modalState.isPending}
+        isLoading={modalState.isLoading}
         serverErrors={modalState.serverErrors}
         schema={commentSchema}
       />

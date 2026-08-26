@@ -17,28 +17,29 @@ export function useTableManager(data, itemsPerPage) {
   const { getBlogName } = useBlog();
   const isFirstRender = useRef(true);
 
-  // ✅ فیلتر کردن داده‌ها
+  // Filter data based on search term and active filter
   const filteredData = useMemo(() => {
     if (!data || data.length === 0) return [];
     if (!debouncedSearch && debouncedFilter === "all") return data;
     return handelSearch(data, debouncedSearch, debouncedFilter);
   }, [data, debouncedSearch, debouncedFilter]);
 
-  // ✅ محاسبه صفحه‌بندی
+  // Calculate total pages for pagination
   const totalPages = useMemo(() => {
     return Math.ceil(filteredData.length / itemsPerPage) || 1;
   }, [filteredData.length, itemsPerPage]);
 
-  // ✅ محاسبه startIndex و paginatedData
+  // Calculate starting index for current page
   const startIndex = useMemo(() => {
     return (currentPage - 1) * itemsPerPage;
   }, [currentPage, itemsPerPage]);
 
+  // Get paginated data slice
   const paginatedData = useMemo(() => {
     return filteredData.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredData, startIndex, itemsPerPage]);
 
-  // ✅ مدیریت لودینگ
+  // Show loading state when filter or search changes
   useEffect(() => {
     setIsLoading(true);
     const timer = setTimeout(() => {
@@ -47,7 +48,7 @@ export function useTableManager(data, itemsPerPage) {
     return () => clearTimeout(timer);
   }, [debouncedFilter, debouncedSearch]);
 
-  // ✅ تنظیم صفحه هنگام تغییر داده
+  // Reset current page when data changes (skip on first render)
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -73,10 +74,12 @@ export function useTableManager(data, itemsPerPage) {
     (item, column) => {
       const value = item[column.key];
 
+      // Use custom render function if provided
       if (column.render) {
         return column.render(value, item);
       }
 
+      // Handle image column with Next.js Image component
       if (column.key === "image") {
         return (
           <Image
@@ -90,14 +93,17 @@ export function useTableManager(data, itemsPerPage) {
         );
       }
 
+      // Format date column
       if (column.key === "createdAt") {
         return formatToSolarDate(value);
       }
 
+      // Convert category ID to category name
       if (column.key === "categoryId") {
         return getCategoryName(value);
       }
 
+      // Convert article ID to article/blog name
       if (column.key === "articleId") {
         return getBlogName(value);
       }

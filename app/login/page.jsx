@@ -1,7 +1,7 @@
 "use client";
 
 import SpinnerLoading from "@/components/shared/SpinnerLoading";
-import React from "react";
+import React, { useEffect } from "react";
 import { Lock, ArrowRight, Sparkles, User } from "lucide-react";
 import { useLoginManager } from "@/hooks/useLoginManager";
 
@@ -81,10 +81,10 @@ const Login = () => {
                   disabled={isSubmitting}
                 >
                   <span>
-                    {!isSubmitting ? (
-                      "ورود"
-                    ) : (
+                    {isSubmitting ? (
                       <SpinnerLoading width="v-6" height="h-6" />
+                    ) : (
+                      "ورود"
                     )}
                   </span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -102,7 +102,7 @@ const Login = () => {
                 <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-white" />
               </div>
             </div>
-                    
+
             <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent mb-3">
               وبلاگ من
             </h1>

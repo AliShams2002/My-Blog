@@ -28,6 +28,11 @@ export default function BlogsProvider({ blogsData, children }) {
   );
 }
 
+// Custom hook to use blog context
 export const useBlog = () => {
-  return useContext(BlogContext);
+  const context = useContext(BlogContext);
+  if (!context) {
+    throw new Error("useBlog must be used within an AppProvider");
+  }
+  return context;
 };

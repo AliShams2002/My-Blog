@@ -42,11 +42,11 @@ export const revalidate = 30;
 
 export default async function HomePage() {
   // Fetch all blogs
-  const { data: allBlogs } = await getAllBlogs();
+  const { data: result } = await getAllBlogs();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-iransans-edit pb-6">
-      <HomeClient data={allBlogs} />
+      <HomeClient data={result} />
     </div>
   );
 }

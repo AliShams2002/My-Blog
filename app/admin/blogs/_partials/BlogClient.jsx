@@ -93,7 +93,7 @@ const BlogClient = ({ blogs: initialBlogs, categories }) => {
         title={modalState.mode === "add" ? "افزودن مقاله جدید" : "ویرایش مقاله"}
         initialData={modalState.selectedBlog || {}}
         fields={blogFields}
-        isLoading={modalState.isPending}
+        isLoading={modalState.isLoading}
         serverErrors={modalState.serverErrors}
         schema={blogSchema}
       />

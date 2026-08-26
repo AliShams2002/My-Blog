@@ -9,7 +9,7 @@ export const userNameValidation = z
 // Password validation rules
 export const passwordValidation = z
   .string()
-  .min(6, "رمز عبوز حداقل 6 کاراکتر است")
+  .min(8, "رمز عبوز حداقل 8 کاراکتر است")
   .max(12, "رمز عبور حداکثر 12 کاراکتر است");
 
 // Login form validation schema

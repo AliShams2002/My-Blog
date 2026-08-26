@@ -123,7 +123,7 @@ const Header = () => {
 
                 {/* User modal */}
                 {isModuleOpen && (
-                  <div className="min-w-56 w-full absolute top-12 left-0 bg-gray-800 flex items-center flex-col gap-2 rounded-2xl p-2 font-semibold">
+                  <div className="min-w-56 w-full absolute top-12 left-0 bg-gray-800 flex items-center flex-col gap-2 rounded-2xl p-2 font-semibold shadow-2xl">
                     <h3 className="w-full text-gray-400 p-2 border-b border-gray-700">
                       {user.username}
                     </h3>

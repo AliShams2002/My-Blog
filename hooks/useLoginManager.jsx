@@ -18,8 +18,7 @@ export function useLoginManager() {
   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
-    formState: { errors },
+    formState: { isSubmitting, errors },
     setError,
     clearErrors,
   } = useForm({ resolver: zodResolver(loginSchema) });
@@ -46,8 +45,6 @@ export function useLoginManager() {
 
   // Handles login form submission
   const handleSubmitForm = useCallback(async (formData) => {
-    setIsLoadingState(true);
-
     const form = new FormData();
     Object.entries(formData).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
@@ -55,17 +52,19 @@ export function useLoginManager() {
       }
     });
     startTransition(async () => {
+      setIsLoadingState(true);
       const response = await loginAction(form);
       if (response.success) {
         const { data } = response;
         // Update auth context with user data and token
         login({ userData: data.user, accessToken: data.token });
         toast.success(TOAST_MESSAGES.loginSuccess);
+        setIsLoadingState(false);
         router.push("admin/dashboard");
       } else {
         handleErrors(response.errors);
         setIsLoadingState(false);
-        toast.error(response.message || response.error || TOAST_MESSAGES.error);
+        toast.error(response.data.data.message || TOAST_MESSAGES.error);
       }
     });
   }, []);

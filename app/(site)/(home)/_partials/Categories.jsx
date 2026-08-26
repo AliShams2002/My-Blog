@@ -69,7 +69,7 @@ const Categories = ({
                     >
                       <Image
                         src={`${process.env.NEXT_PUBLIC_BASE_URL}${blog?.image}`}
-                        className="rounded-lg object-cover"
+                        className="rounded-lg object-cover line-clamp-1"
                         width={48}
                         height={48}
                         quality={65}

@@ -220,7 +220,7 @@ const BlogClient = ({ initialBlogDetails, initialBlogs, initialComments }) => {
                   <div className="h-32 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto mb-4 overflow-hidden">
                     <Image
                       src={`${process.env.NEXT_PUBLIC_BASE_URL}${suggestedBlogs[0]?.image}`}
-                      className="bg-cover"
+                      className="bg-cover line-clamp-1"
                       width={300}
                       height={350}
                       alt={suggestedBlogs[0]?.title}
@@ -250,7 +250,7 @@ const BlogClient = ({ initialBlogDetails, initialBlogs, initialComments }) => {
                       <div className="flex gap-3">
                         <Image
                           src={`${process.env.NEXT_PUBLIC_BASE_URL}${post?.image}`}
-                          className="rounded-lg object-cover group-hover:opacity-80 transition-opacity"
+                          className="rounded-lg object-cover group-hover:opacity-80 transition-opacity line-clamp-1"
                           width={80}
                           height={80}
                           alt={post.title}

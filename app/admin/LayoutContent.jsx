@@ -52,7 +52,7 @@ const LayoutContent = ({ children }) => {
   }, [pathName, menuItems]);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black">
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black overflow-x-scroll hide-scrollbar">
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <Sidebar

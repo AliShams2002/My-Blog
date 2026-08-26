@@ -15,15 +15,40 @@ export const serverFetcher = async (url, option = {}) => {
         ...option.headers,
       },
     });
+
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("text/html")) {
+      return {
+        success: false,
+        error: {
+          message: "سرور پاسخ HTML برگرداند",
+          statusCode: res.status,
+          type: "SERVER_ERROR",
+        },
+      };
+    }
+
+    if (res.status === 204) {
+      return { success: true, data: null };
+    }
     const data = await res.json();
 
-    // Handle non-OK responses
+    // Handle non-OK responses with appropriate error types
     if (!res.ok) {
-      const errorMessage =
-        data?.message || `خطا در درخواست: ${response.status}`;
-      const error = new Error(errorMessage);
-      error.message = errorMessage;
-      throw error;
+      let errorType = "SERVER_ERROR";
+      if (res.status === 403) errorType = "UNAUTHORIZED";
+      else if (res.status === 401) errorType = "FORBIDDEN";
+      else if (res.status === 404) errorType = "NOT_FOUND";
+
+      return {
+        success: false,
+        error: {
+          message: data?.message || `خطا در درخواست: ${res.status}`,
+          statusCode: res.status,
+          type: errorType,
+          data: data,
+        },
+      };
     }
 
     return {
@@ -31,9 +56,23 @@ export const serverFetcher = async (url, option = {}) => {
       data,
     };
   } catch (error) {
-    throw {
+    console.error("Server fetcher error:", error);
+
+    let errorType = "NETWORK_ERROR";
+    let message = "خطا در ارتباط با سرور";
+
+    if (error.name === "TypeError" && error.message.includes("fetch")) {
+      message = "خطا در ارتباط با سرور. لطفاً اتصال اینترنت خود را بررسی کنید.";
+    }
+
+    return {
       success: false,
-      message: error.message || "خطا در برقراری ارتباط با سرور",
+      error: {
+        message: message,
+        statusCode: "NETWORK_ERROR",
+        type: errorType,
+        originalError: error,
+      },
     };
   }
 };
@@ -48,24 +87,56 @@ export const clientFetcher = async (url, option = {}) => {
       },
     });
 
+    const contentType = res.headers.get("content-type");
+    if (contentType && contentType.includes("text/html")) {
+      return {
+        success: false,
+        error: {
+          message: "سرور پاسخ HTML برگرداند",
+          statusCode: res.status,
+          type: "SERVER_ERROR",
+        },
+      };
+    }
+
+    if (res.status === 204) {
+      return { success: true, data: null };
+    }
+
     const data = await res.json();
 
-    // Handle non-OK responses
+    // Handle non-OK responses with appropriate error types
     if (!res.ok) {
-      const errorMessage =
-        data?.message || `خطا در درخواست: ${response.status}`;
-      const error = new Error(errorMessage);
-      error.message = errorMessage;
-      throw error;
+      let errorType = "SERVER_ERROR";
+      if (res.status === 403) errorType = "UNAUTHORIZED";
+      else if (res.status === 401) errorType = "FORBIDDEN";
+      else if (res.status === 404) errorType = "NOT_FOUND";
+
+      return {
+        success: false,
+        error: {
+          message: data?.message || `خطا در درخواست: ${res.status}`,
+          statusCode: res.status,
+          type: errorType,
+          data: data,
+        },
+      };
     }
     return {
       success: true,
       data,
     };
   } catch (error) {
-    throw {
+    console.error("Client fetcher error:", error);
+
+    return {
       success: false,
-      message: error.message || "خطا در برقراری ارتباط با سرور",
+      error: {
+        message: "خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.",
+        statusCode: "NETWORK_ERROR",
+        type: "NETWORK_ERROR",
+        originalError: error,
+      },
     };
   }
 };

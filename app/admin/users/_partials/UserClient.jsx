@@ -103,7 +103,7 @@ const UserClient = ({ users: initialUsers }) => {
         }
         initialData={modalState.selectedUser || {}}
         fields={modalState.mode === "add" ? addUserFields : editUserFields}
-        isLoading={modalState.isPending}
+        isLoading={modalState.isLoading}
         serverErrors={modalState.serverErrors}
         schema={modalState.mode === "add" ? userSchema : profileUpdateSchema}
       />

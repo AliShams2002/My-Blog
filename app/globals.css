@@ -33,3 +33,12 @@ body {
 .bg-custom-pattern {
   background-image: url('/images/bg-patterns.svg');
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
