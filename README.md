@@ -1,36 +1,143 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 📝 AI Blog
 
-## Getting Started
+> A modern full-stack blog platform built with **Next.js**, focused on scalable architecture, authentication, performance, and a production-oriented development approach.
 
-First, run the development server:
+\
+
+
+### 🔗 [Live Demo](https://my-blog-blond-eight-92.vercel.app/)
+
+---
+
+## ✨ Features
+
+- 📰 Blog browsing with **search, filtering & sorting**
+- 📖 Dynamic article pages with **related posts**
+- 💬 Comments
+- 🔐 **JWT Authentication** with HTTP-only cookies
+- 🛡️ **Role-Based Authorization**
+- 👨‍💼 Admin dashboard
+- 🗂️ Blog & category management
+- 👥 User management
+- ⚡ **Server Actions**
+- 🚀 **ISR & server-side caching**
+- 🔎 Dynamic metadata & SEO-friendly pages
+- 📱 Fully responsive UI
+- ✅ Advanced forms with **React Hook Form + Zod**
+
+---
+
+## 🛠️ Tech Stack
+
+| Category       | Technologies                     |
+| -------------- | -------------------------------- |
+| Frontend       | Next.js 16, React 19, JavaScript |
+| Styling        | Tailwind CSS 4                   |
+| Forms          | React Hook Form, Zod             |
+| Authentication | HTTP-only Cookies                |
+| Deployment     | Vercel                           |
+
+---
+
+## 🏗️ Architecture
+
+The project follows a modular architecture with clear separation of concerns.
+
+```text
+app/
+├── (site)/
+├── admin/
+└── ...
+
+components/
+├── admin/
+├── site/
+└── shared/
+
+hooks/
+services/
+context/
+utils/
+```
+
+### Key Concepts
+
+- Server & Client Components
+- Server Actions
+- Custom Hooks
+- Service Layer
+- Reusable Components
+- Public & Authenticated Data Fetching
+- ISR & Caching
+- Role-Based Authorization
+
+---
+
+## 🎯 Project Goals
+
+This project was built to practice and demonstrate:
+
+- Modern **Next.js App Router**
+- Server Actions
+- Authentication & Authorization
+- ISR & performance optimization
+- Advanced forms & validation
+- SEO
+- Clean and scalable frontend architecture
+- Building a production-oriented front-end application
+
+---
+
+## 🚀 Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone <your-repository-url>
+cd ai_blog
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open **[http://localhost:3000](http://localhost:3000)**
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📸 Screenshots
 
-## Learn More
+### Home
 
-To learn more about Next.js, take a look at the following resources:
+<img width="1100" height="1725" alt="Home" src="https://github.com/user-attachments/assets/10af5864-41df-42c6-93b8-7f5b0fd0ab71" />
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Article
 
-## Deploy on Vercel
+<img width="1100" height="2345" alt="Article" src="https://github.com/user-attachments/assets/00b2f319-2680-4de2-9943-54e517e71e9c" />
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Admin Dashboard
+
+<img width="1100" height="939" alt="Dashboard" src="https://github.com/user-attachments/assets/c253b79e-2a92-400a-89e3-9c90e72ed1d6" />
+
+
+---
+
+## 👨‍💻 About
+
+This project was built as a **Frontend / Next.js portfolio project** to explore modern application architecture, authentication, server-side rendering strategies, performance optimization, and scalable component design.
+
+---
+
+### 📄 License
+
+This project is created for educational and portfolio purposes.
