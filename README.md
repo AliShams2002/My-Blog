@@ -7,6 +7,9 @@
 
 ### 🔗 [Live Demo](https://my-blog-blond-eight-92.vercel.app/)
 
+Admin aacount info: {username: 'admin', password: 'A123456b'},
+User account info: {username: 'user', password: 'A123456b'},
+
 ---
 
 ## ✨ Features
